@@ -1,5 +1,5 @@
 {
-  "name": "exquisite-bodies",
+  "name": "exquisite-bodies server module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -21,7 +21,7 @@
       "babelify"
     ]
   },
-  "author": "",
+  "author": "Oliver Stigley",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.10.1",
