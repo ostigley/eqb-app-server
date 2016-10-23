@@ -4,10 +4,10 @@ This is a socket server for an app version of my Exquisite Bodies series of game
 This app will run a socket server, creating a hub for managing drawing data and game information, for Exquisite Bodies.
 
 ##Socket Details
-The socket server responds to 3 actions:
-Connection
-__Action__
-Disconnection
+The socket server responds to 3 actions.
+* Connection
+* __Action__
+* Disconnection
 
 ###__Action__
 The client only needs to send drawing data to the server.  
@@ -44,11 +44,11 @@ will log the following:
 the state object contains the following data:
 {
 	body: {
-		body: "",
-		feet: "",
-		final: "",
-		head: "",
-	}
+	  body: "",
+	  feet: "",
+	  final: "",
+	  head: "",
+	},
 	peep: "",
 	level: null,
 	num: 1
