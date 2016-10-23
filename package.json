@@ -1,13 +1,13 @@
 {
-  "name": "exquisite-bodies server module",
+  "name": "exquisite-bodies-server-module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./server/index.js --exec babel-node",
     "watch": "watchify client/index.js -o client/public/bundle.js -dv -t babelify",
-    "test:unit": "mocha test/server/unit/**.js --compilers js:babel-core/register --watch",
-    "test:integration": "mocha test/server/integration/*.* --compilers js:babel-core/register",
+    "test:unit": "mocha test/server/unit/**.js --compilers js:babel-core/register",
+    "test:integration": "mocha test/server/integration/**.js --compilers js:babel-core/register",
     "test:all": "mocha test/server/**/*.* --compilers js:babel-core/register"
   },
   "babel": {

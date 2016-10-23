@@ -1,14 +1,14 @@
 import {GAMEMANAGER} from '../../../server/src/gamemanager.js'
 import {assert, expect} from 'chai'
 import io 								from 'socket.io-client'
-import {startSocket}	 		from '../../../server/src/socket.js'
+import {startServer}	 		from '../../../server/src/server.js'
 
 // var chai = require("chai");
 // var chaiAsPromised = require("chai-as-promised");
 
 // chai.use(chaiAsPromised);
 
-const server = startSocket()
+const server = startServer()
 
 const socketURL = 'http://localhost:3000'
 
