@@ -76,7 +76,7 @@ export const addBodyPart = (state, b, part, drawing) => {
 	const cropped = crop(drawing)
 	//add drawing data
 	nextState.bodies[b][part] = drawing
-	nextState.bodies[b].peep = cropped
+	nextState.bodies[b].clue = cropped
 
 	//update game level and progress
 	nextState.progress = progress(state)

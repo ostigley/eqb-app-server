@@ -107,14 +107,14 @@ describe('AddBodyPart basic logic', () => {
 	const state = addPlayer(addPlayer(startGame(player1), player2), player3)
 	const nextState = addBodyPart(state, body, part, drawing1)
 	const content = nextState.bodies[body][part]
-	const peep = nextState.bodies[body].peep
+	const clue = nextState.bodies[body].clue
 
 	describe('The send function', () => {
 		it('returns the correct object propertys', () => {
 			const data = nextState.send(1)
 			assert.equal(data.level, 1)
 			expect(data.body.head).to.have.length.above(21)
-			expect(data.body.peep).to.have.length.above(21)
+			expect(data.body.clue).to.have.length.above(21)
 		})
 	})
 
@@ -132,9 +132,9 @@ describe('AddBodyPart basic logic', () => {
 		assert.equal(state.level.current, nextState.level.current)
 	})
 
-	it('generates peep data, and adds is to state', () => {
-		expect(peep).to.have.length.above(21)
-		assert.notEqual(peep, drawing1)
+	it('generates clue data, and adds is to state', () => {
+		expect(clue).to.have.length.above(21)
+		assert.notEqual(clue, drawing1)
 	})
 
 	it('increments progress to 2', () => {
@@ -165,7 +165,7 @@ describe('AddBodyPart makes new level ', () => {
 
 describe('Adding a body part has an effect on state.players', () => {
 	const [player1, player2, player3] = [1,2,3]
-	const parts = ['head', 'body', 'feet']
+	const parts = ['head', 'body', 'legs']
 	const state = addPlayer(addPlayer(startGame(player1), player2), player3)
 	const state1 = addBodyPart(state,  "1", 'head', drawing1)
 	const state2 = addBodyPart(state1, "2",'head' , drawing2)
@@ -198,33 +198,33 @@ describe('Adding a body part has an effect on state.players', () => {
 		assert.notDeepEqual(state5.players, state6.players)
 	})
 
-	it('has no peep on game begnining', () => {
-		expect(state.bodies[1].peep).to.equal('')
+	it('has no clue on game begnining', () => {
+		expect(state.bodies[1].clue).to.equal('')
 	})
 
 	describe('Adding a body part', () => {
-		it('after 1 round, updates a body peep value', ()=>{
-			assert.notEqual(state.bodies[1].peep, state1.bodies[1].peep)
+		it('after 1 round, updates a body clue value', ()=>{
+			assert.notEqual(state.bodies[1].clue, state1.bodies[1].clue)
 		})
 
-		it('after 2 round, updates a body peep value', ()=>{
-			assert.notEqual(state1.bodies[2].peep, state2.bodies[2].peep)
+		it('after 2 round, updates a body clue value', ()=>{
+			assert.notEqual(state1.bodies[2].clue, state2.bodies[2].clue)
 		})
 
-		it('after 3 rounds, updates a body peep value', ()=>{
-			assert.notEqual(state2.bodies[3].peep, state3.bodies[3].peep)
+		it('after 3 rounds, updates a body clue value', ()=>{
+			assert.notEqual(state2.bodies[3].clue, state3.bodies[3].clue)
 		})
 
-		it('after 4 rounds, updates a body peep value', ()=>{
-			assert.notEqual(state3.bodies[1].peep, state4.bodies[1].peep)
+		it('after 4 rounds, updates a body clue value', ()=>{
+			assert.notEqual(state3.bodies[1].clue, state4.bodies[1].clue)
 		})
 
-		it('after 5 rounds, updates a body peep value', ()=>{
-			assert.notEqual(state4.bodies[2].peep, state5.bodies[2].peep)
+		it('after 5 rounds, updates a body clue value', ()=>{
+			assert.notEqual(state4.bodies[2].clue, state5.bodies[2].clue)
 		})
 
-		it('after 6 rounds, updates a body peep value', ()=>{
-			assert.notEqual(state5.bodies[3].peep, state6.bodies[3].peep)
+		it('after 6 rounds, updates a body clue value', ()=>{
+			assert.notEqual(state5.bodies[3].clue, state6.bodies[3].clue)
 		})
 
 	})
@@ -233,7 +233,7 @@ describe('Adding a body part has an effect on state.players', () => {
 
 describe('After 9 rounds', () => {
 	const [player1, player2, player3] = [1,2,3]
-	const parts = ['head', 'body', 'feet']
+	const parts = ['head', 'body', 'legs']
 	let state = addPlayer(addPlayer(startGame(player1), player2), player3)
 	for(let i = 0; i < 3; i++) {
 		for (let k = 1; k < 4; k ++) {

@@ -20,7 +20,7 @@ const setup = (io, num) => {
 		for (let i=1; i < num+1; i++ ) {
 			let player = io.connect(socketURL, {
 				transports: ['websocket'],
-				'force new connection': true
+				multiplex: false
 			})
 			player.on('connect', function() {
 				players[i] = player
@@ -33,7 +33,15 @@ const setup = (io, num) => {
 	})
 }
 
-describe('The GAMEMANAGER', function() {
+const breakDown = (io, num) => {
+	io.disconnect()
+}
+
+describe ('The GAMEMANAGER', function () {
+
+})
+
+describe('add method', function() {
 	this.timeout(5000)
 	it('returns an object with an add method', (done) => {
 		setup(io, 1)
@@ -45,7 +53,7 @@ describe('The GAMEMANAGER', function() {
 	})
 })
 
-describe('Adding 3 players', function() {
+describe('add method', function() {
 	this.timeout(5000)
 	it('adds players 1, 2 and 3 to the first game', (done) => {
 		setup(io, 3)
@@ -60,7 +68,7 @@ describe('Adding 3 players', function() {
 	})
 })
 
-describe('Adding 6 players', function() {
+describe('add method', function() {
 	this.timeout(5000)
 	it('adds players 4, 5, and 6 to game 2', (done) => {
 		setup(io, 6)

@@ -4,22 +4,22 @@ const INITIAL_STATE = deepFreeze({
 		1: {
 			head: '',
 			body: '',
-			feet: '',
-			peep: '',
+			legs: '',
+			clue: '',
 			final: ''
 		},
 		2: {
 			head: '',
 			body: '',
-			feet: '',
-			peep: '',
+			legs: '',
+			clue: '',
 			final: ''
 		},
 		3: {
 			head: '',
 			body: '',
-			feet: '',
-			peep: '',
+			legs: '',
+			clue: '',
 			final: ''
 		}
 	},
