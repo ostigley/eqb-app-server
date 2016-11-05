@@ -109,15 +109,6 @@ describe('AddBodyPart basic logic', () => {
 	const content = nextState.bodies[body][part]
 	const clue = nextState.bodies[body].clue
 
-	describe('The send function', () => {
-		it('returns the correct object propertys', () => {
-			const data = nextState.send(1)
-			assert.equal(data.level, 1)
-			expect(data.body.head).to.have.length.above(21)
-			expect(data.body.clue).to.have.length.above(21)
-		})
-	})
-
 	it('updates body with a player\'s drawing', () => {
 		expect(content).to.have.length.above(21)
 		assert.equal(content, drawing1)
