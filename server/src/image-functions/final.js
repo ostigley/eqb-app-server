@@ -2,7 +2,7 @@ import Canvas, {Image} from 'canvas'
 
 export default (state, width = 700, height = 1200) => {
 	let nextState = Object.assign({}, state)
-	const parts = ['head', 'body', 'feet']
+	const parts = ['head', 'body', 'legs']
 
 	for(let i = 1; i<4; i++) {
 		const body = nextState.bodies[i]

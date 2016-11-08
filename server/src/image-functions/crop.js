@@ -3,7 +3,7 @@ import Canvas from 'canvas'  //canvas manipulation outside of the browser
 const Image = Canvas.Image
 
 export default (drawing, width = 700, height = 400, percentage = 0.9) => {
-  let peepData
+  let clueData
   let canvas = new Canvas(width, height)
   let ctx = canvas.getContext('2d')
 
@@ -27,6 +27,6 @@ export default (drawing, width = 700, height = 400, percentage = 0.9) => {
     dy,
     dWidth,
     dHeight)
-  peepData = canvas.toDataURL()
-  return peepData
+  clueData = canvas.toDataURL()
+  return clueData
 }

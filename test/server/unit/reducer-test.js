@@ -32,8 +32,8 @@ describe('Reducer START_GAME', () => {
 		for (let num in newGame.bodies) {
 			assert.equal(newGame.bodies[num].head, "")
 			assert.equal(newGame.bodies[num].body, "")
-			assert.equal(newGame.bodies[num].feet, "")
-			assert.equal(newGame.bodies[num].peep, "")
+			assert.equal(newGame.bodies[num].legs, "")
+			assert.equal(newGame.bodies[num].clue, "")
 			assert.equal(newGame.bodies[num].final, "")
 		}
 	})
@@ -121,7 +121,7 @@ describe('Reducer ADD_DRAWING', () => {
 	const nextState = actions.reduce(reducer, {})
 
 	const content = nextState.bodies[body][part]
-	const peep = nextState.bodies[body].peep
+	const clue = nextState.bodies[body].clue
 
 	it('returns a frozen / immutable object', () => {
 		assert(Object.isFrozen(nextState), 'it is frozen')
@@ -145,9 +145,9 @@ describe('Reducer ADD_DRAWING', () => {
 		assert.equal(1, nextState.level.current)
 	})
 
-	it('generates peep data, and adds is to state', () => {
-		expect(peep).to.have.length.above(21)
-		assert.notEqual(peep, drawing1)
+	it('generates clue data, and adds is to state', () => {
+		expect(clue).to.have.length.above(21)
+		assert.notEqual(clue, drawing1)
 	})
 
 	it('increments progress to 2', () => {
