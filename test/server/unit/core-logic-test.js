@@ -1,7 +1,7 @@
 import fs from 'fs'
 import crop 					from '../../../server/src/image-functions/crop.js'
 import {
-	startGame,
+	newGame,
 	addPlayer,
 	removePlayer,
 	addBodyPart,
@@ -22,38 +22,38 @@ import {INITIAL_STATE} from '../../../server/src/new-game.js'
 
 describe('Application logic for starting a new game ', () => {
 	const playerId = 123
-	const newGame = startGame(playerId)
+	const game = newGame(playerId)
 	it('returns a frozen / immutable object', () => {
-		assert(Object.isFrozen(newGame), 'it is frozen')
-		assert(Object.isFrozen(newGame.bodies), 'it is frozen')
+		assert(Object.isFrozen(game), 'it is frozen')
+		assert(Object.isFrozen(game.bodies), 'it is frozen')
 	})
 
 	it('returns an object with "bodies" Object', () => {
-		expect(Object.keys(newGame.bodies)).to.have.length(3)
-		assert.deepEqual(newGame.bodies, INITIAL_STATE.bodies)
+		expect(Object.keys(game.bodies)).to.have.length(3)
+		assert.deepEqual(game.bodies, INITIAL_STATE.bodies)
 	})
 
 	it('returns a null value for Level ', ()=> {
-		expect(newGame.level.current).to.be.null
+		expect(game.level.current).to.be.null
 	})
 
 	it('returns a null value for Level ', ()=> {
-		expect(newGame.level.previous).to.be.null
+		expect(game.level.previous).to.be.null
 	})
 
 	it('returns a null value for progress because game not started', () =>{
-		expect(newGame.progress).to.be.zero
+		expect(game.progress).to.be.zero
 	})
 
 	it('returns a player object, with one player', () => {
-		assert.equal(newGame.players.num, 1)
-		assert.equal(newGame.players[playerId].body, 1)
+		assert.equal(game.players.num, 1)
+		assert.equal(game.players[playerId].body, 1)
 	})
 })
 
 describe ('Application logic for adding a player', () => {
 	const [player1, player2, player3, player4] = [1,2,3,4]
-	const state0 = startGame(player1)
+	const state0 = newGame(player1)
 	const nextState = addPlayer(state0, player2)
 
 	it('returns a frozen / immutable object', () => {
@@ -93,7 +93,7 @@ describe ('Application logic for adding a player', () => {
 
 describe ('Application logic for removing a player', () => {
 	const [player1, player2, player3, player4] = [1,2,3,4]
-	const state0 = startGame(player1)
+	const state0 = newGame(player1)
 	const nextState = addPlayer(state0, player2)
 
 	//remove player2, game state updated
@@ -107,7 +107,7 @@ describe('AddBodyPart basic logic', () => {
 	const [player1, player2, player3] = [1,2,3]
 	const body = 1
 	const part = 'head'
-	const state = addPlayer(addPlayer(startGame(player1), player2), player3)
+	const state = addPlayer(addPlayer(newGame(player1), player2), player3)
 	const nextState = addBodyPart(state, body, part, drawing1)
 	const content = nextState.bodies[body][part]
 	const clue = nextState.bodies[body].clue
@@ -141,7 +141,7 @@ describe('AddBodyPart makes new level ', () => {
 	const [player1, player2, player3] = [1,2,3]
 	const body = 1
 	const part = 'head'
-	var nextState = addPlayer(addPlayer(startGame(player1), player2), player3)
+	var nextState = addPlayer(addPlayer(newGame(player1), player2), player3)
 
 	for (let i=1 ; i < 4; i ++){
 		nextState = addBodyPart(nextState, i, part, drawing1)
@@ -160,7 +160,7 @@ describe('AddBodyPart makes new level ', () => {
 describe('Adding a body part has an effect on state.players', () => {
 	const [player1, player2, player3] = [1,2,3]
 	const parts = ['head', 'body', 'legs']
-	const state = addPlayer(addPlayer(startGame(player1), player2), player3)
+	const state = addPlayer(addPlayer(newGame(player1), player2), player3)
 	const state1 = addBodyPart(state,  "1", 'head', drawing1)
 	const state2 = addBodyPart(state1, "2",'head' , drawing2)
 	const state3 = addBodyPart(state2, "3",'head' , drawing3)
@@ -228,7 +228,7 @@ describe('Adding a body part has an effect on state.players', () => {
 describe('After 9 rounds', () => {
 	const [player1, player2, player3] = [1,2,3]
 	const parts = ['head', 'body', 'legs']
-	let state = addPlayer(addPlayer(startGame(player1), player2), player3)
+	let state = addPlayer(addPlayer(newGame(player1), player2), player3)
 	for(let i = 0; i < 3; i++) {
 		for (let k = 1; k < 4; k ++) {
 			state = addBodyPart(state, k, parts[i], drawing1)

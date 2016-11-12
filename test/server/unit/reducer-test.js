@@ -8,7 +8,7 @@ import {
 	drawing3}			from '../../helpers/test-drawings.js'
 
 	import {
-	startGame,
+	newGame,
 	addPlayer,
 	addBodyPart}	from '../../../server/src/core.js'
 import {INITIAL_STATE} from '../../../server/src/new-game.js'

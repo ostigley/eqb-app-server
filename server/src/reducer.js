@@ -1,5 +1,5 @@
 import {
-	startGame,
+	newGame,
 	addPlayer,
   removePlayer,
 	addBodyPart,
@@ -8,7 +8,7 @@ import {
 export default function reducer(state = {}, action) {
   switch(action.type) {
     case('NEW_GAME'):
-      return startGame(action.playerId)
+      return newGame(action.playerId)
     case('ADD_PLAYER'):
       return addPlayer(state, action.playerId, action.gameId)
     case('REMOVE_PLAYER'):
