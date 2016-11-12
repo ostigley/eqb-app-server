@@ -4,7 +4,9 @@ import {
 	startGame,
 	addPlayer,
 	removePlayer,
-	addBodyPart}		from '../../../server/src/core.js'
+	addBodyPart,
+	setDimensions,
+	lockDimensions}		from '../../../server/src/core.js'
 import 	{
 	expect,
 	assert}					from 'chai'
@@ -86,6 +88,7 @@ describe ('Application logic for adding a player', () => {
 
 		assert.equal(state.level.current, 1)
 	})
+
 })
 
 describe ('Application logic for removing a player', () => {
@@ -246,3 +249,20 @@ describe('After 9 rounds', () => {
 		})
 	}
 })
+
+describe('setDimensions', () => {
+		let state = {
+			players: {
+				1: {}
+			}
+		}
+		let playerId= 1
+		let nextState = setDimensions(state, playerId, {height: 123, width: 321})
+		const { height, width } = nextState.players[1].dimensions
+
+		it('adds a player\'s phone dimensions to state object', () => {
+			assert.equal(height, 123)
+			assert.equal(width, 321)
+		})
+})
+

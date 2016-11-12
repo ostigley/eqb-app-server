@@ -92,6 +92,15 @@ export const addBodyPart = (state, b, part, drawing) => {
 	return deepFreeze(nextState)
 }
 
+export const setDimensions = (state, playerId, dimensions) => {
+	let nextState = clone(state)
+	nextState.players[playerId].dimensions = dimensions
+	return deepFreeze(nextState)
+}
+
+export const lockDimensions = (state) => {
+	return state
+}
 
 
 

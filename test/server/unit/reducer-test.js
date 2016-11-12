@@ -155,3 +155,27 @@ describe('Reducer ADD_DRAWING', () => {
 		assert.equal(nextState2.progress, 2)
 	})
 })
+
+describe('Reducer SET_DIMENSIONS', () => {
+	let state = {
+		players: {
+			1: {}
+		}
+	}
+	let action = {
+    type: 'SET_DIMENSIONS',
+    playerId: 1,
+    dimensions: {
+    	height: 123,
+    	width: 321
+    }
+  }
+
+	let nextState = reducer(state, action)
+	const { height, width } = nextState.players[1].dimensions
+
+	it('adds a player\'s dimensions to state', () => {
+		assert.equal(height, 123)
+		assert.equal(width, 321)
+	})
+})
