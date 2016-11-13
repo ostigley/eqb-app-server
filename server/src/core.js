@@ -4,8 +4,8 @@ import {INITIAL_STATE}from './new-game.js'
 import clone					from 'clone'
 import deepFreeze 		from 'deep-freeze'
 
-const progress = state => {
-	switch(state.progress) {
+const progress = progress => {
+	switch(progress) {
 		case(0):
 			return 1
 		case(1):
@@ -15,11 +15,12 @@ const progress = state => {
 	}
 }
 
-const level = state => {
-		const {current} = state.level
-		return  state.progress === 2
-			? {current: current+1, previous: current}
-			: {current: current, previous: current}
+
+const level = (current, progress) => {
+		//progress never gets to 3.  Once at 2, the level increments, and progress is reset.
+		return  progress === 2
+			? {current: current+1, previous: current, hasChanged: true}
+			: {current: current, previous: current, hasChanged: false}
 }
 
 const scramble = (state) => {
@@ -42,20 +43,37 @@ export const newGame = (playerId, gameId) => {
 	return deepFreeze(nextState)
 }
 
-
-export const addPlayer = (state, playerId, gameId = null) => {
-	if (Object.keys(state).length === 0) return newGame(playerId, gameId) // is state empty
+export const startGame = (state) => {
 	let nextState = clone(state)
-	if (nextState.players.num === 3) return Object.freeze(nextState)
-	const nextPlayer = nextState.players.num+1
-	nextState.players[playerId] = {body: nextPlayer}
-	nextState.players.num = nextPlayer
 
-	if(nextState.players.num === 3) {
+	if(countDimensions(nextState.players) === 3) {
+		state.dimensions = lockDimensions(state.players)
 		nextState.level.current = 1
 	}
 
 	return deepFreeze(nextState)
+}
+
+const countDimensions = players => {
+	var count = 0
+	for (player in players) {
+		player.dimensions ? count++ : null
+	}
+	count
+}
+
+
+export const addPlayer = (state, playerId, gameId = null) => {
+	debugger
+	if (Object.keys(state).length == 0) return newGame(playerId, gameId) // is state empty
+	if (state.players.num === 3) return Object.freeze(state)
+	let nextState = clone(state)
+	nextState.players.num++
+	const nextPlayer = nextState.players.num
+	nextState.players[playerId] = {body: nextPlayer}
+
+	return deepFreeze(nextState)
+
 }
 
 export const removePlayer = (state, playerId) => {
@@ -66,29 +84,44 @@ export const removePlayer = (state, playerId) => {
 	delete nextState.players[playerId];
 	nextState.players.num--
 
-	[nextState.level.current, nextState.level.previous] = [null, null]
+	nextState.level = { current: null, previous: null, hasChanged: true }
 
 	return deepFreeze(nextState)
+
 }
 
-export const addBodyPart = (state, b, part, drawing) => {
+export const addBodyPart = (state, bodyNum, part, drawing) => {
 	let nextState = clone(state)
 	const cropped = crop(drawing)
 	//add drawing data
-	nextState.bodies[b][part] = drawing
-	nextState.bodies[b].clue = cropped
+	nextState.bodies[bodyNum][part] = drawing
+	nextState.bodies[bodyNum].clue = cropped
 
 	//update game level and progress
-	nextState.progress = progress(state)
-	nextState.level = level(state)
+	nextState.progress = progress(state.progress)
+	nextState.level = level(state.level.current, state.progress)
 
 	//scramble player body if necessary
-	nextState.players = nextState.level.current !== state.level.current
-		? scramble(nextState)
-		: nextState.players
+	if(nextState.level.current !== state.level.current) {
+		nextState.players = scramble(nextState)
+	}
+
+	//generate final images if at end of game
 	if (nextState.level.current === 4) {
 		nextState = generateFinal(nextState)
 	}
+/*
+	let newState= nextState.clone(state)
+	const actions = [
+	 	addNewDrawing,
+	 	incrementProgress,
+	 	incrementLevel,
+	 	generateFinal
+	]
+	return actions.reduce( (state, action) => { action(state) }, newState)
+*/
+
+
 	return deepFreeze(nextState)
 }
 
@@ -98,8 +131,8 @@ export const setDimensions = (state, playerId, dimensions) => {
 	return deepFreeze(nextState)
 }
 
-export const lockDimensions = (state) => {
-	return state
+export const lockDimensions = (players) => {
+	return {}
 }
 
 

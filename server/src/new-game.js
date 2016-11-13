@@ -26,7 +26,8 @@ const INITIAL_STATE = deepFreeze({
 	},
 	level: {
 		current: null,
-		previous: null
+		previous: null,
+		hasChanged: false
 	},
 	progress: 0,
 	players: {
