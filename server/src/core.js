@@ -25,23 +25,14 @@ export const newGame = (playerId, gameId) => {
 	return deepFreeze(nextState)
 }
 
-export const startGame = (state) => {
-	let nextState = clone(state)
 
-	if(countDimensions(nextState.players) === 3) {
-		state.dimensions = lockDimensions(state.players)
-		nextState.level.current = 1
-	}
-
-	return deepFreeze(nextState)
-}
 
 const countDimensions = players => {
 	var count = 0
-	for (player in players) {
-		player.dimensions ? count++ : null
+	for (let player in players) {
+		players[player].dimensions ? count++ : null
 	}
-	count
+	return count
 }
 
 
@@ -70,13 +61,6 @@ export const removePlayer = (state, playerId) => {
 
 	return deepFreeze(nextState)
 
-/*
-resetLevel
-resetProgress
-
-
-
-*/
 }
 
 export const addBodyPart = (state, bodyNum, part, drawing) => {
@@ -84,15 +68,13 @@ export const addBodyPart = (state, bodyNum, part, drawing) => {
 	nextState = addNewDrawing(nextState, bodyNum, part, drawing)
 
 	const actions = [
-	 	incrementLevel,
 	 	incrementProgress,
+	 	incrementLevel,
 	 	generateFinal
 	]
 
 	return deepFreeze(actions.reduce( (state, action) => action(state), nextState))
 }
-
-
 
 
 
@@ -120,11 +102,10 @@ export const addNewDrawing = (state, bodyNum, part, drawing) => {
 
 export const incrementProgress = state => {
 	state = clone(state)
-
 	if (state.progress < 3) {
 		state.progress++
 	} else {
-		state.progress = 0
+		state.progress = 1
 	}
 
 	return state
@@ -133,11 +114,37 @@ export const incrementProgress = state => {
 export const setDimensions = (state, playerId, dimensions) => {
 	let nextState = clone(state)
 	nextState.players[playerId].dimensions = dimensions
-	return deepFreeze(nextState)
+	return deepFreeze(startGame(nextState))
 }
 
-export const lockDimensions = (players) => {
-	return {}
+export const startGame = (state) => {
+
+	if(countDimensions(state.players) === 3) {
+		state = clone(state)
+		state.dimensions = lockDimensions(state)
+		state.level.current = 1
+		return deepFreeze(state)
+	}
+
+	return state
+}
+
+export const lockDimensions = (state) => {
+	const {players} = state
+	var device
+	var area = 100000000000
+	for (let player in players) {
+		if (player !== 'num') {
+			let {height, width} = players[player].dimensions
+			var nextArea = height * width
+			if( nextArea < area) {
+				area = nextArea
+				device = player
+			}
+		}
+	}
+
+	return players[device].dimensions
 }
 
 

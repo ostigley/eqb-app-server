@@ -154,7 +154,7 @@ describe('incrementProgress', () => {
 		endState.progress = 3
 		const nextState = incrementProgress(endState)
 		it('resets progress', () => {
-			assert.equal(nextState.progress, 0)
+			assert.equal(nextState.progress, 1)
 		})
 	})
 })
@@ -172,49 +172,73 @@ describe('setDimensions', () => {
 	})
 })
 
+describe('lockDimensions', () => {
+	const newState = {
+		players: {
+			1: {dimensions: {height: 1, width: 2}},
+			2: {dimensions: {height: 3, width: 4}},
+			3: {dimensions: {height: 2, width: 1}},
+		}
+	}
 
-// describe.skip('After 9 rounds', () => {
-// 	const gameSetup = [
-// 		addPlayer,
-// 		setDimensions,
-// 		addPlayer,
-// 		setDimensions,
-// 		addPlayer,
-// 		setDimensions
-// 	]
+	const dimensions = lockDimensions(newState)
 
-// 	const level1 = [
-// 		addBodyPart,
-// 		addBodyPart,
-// 		addBodyPart]
+	it('sets dimensions to those of smallest player device', () => {
+		assert.deepEqual(dimensions, {height: 1, width: 2})
+	})
+})
 
-// 	const level2 = [
-// 		addBodyPart,
-// 		addBodyPart,
-// 		addBodyPart
-// 	]
-// 	const level3 = [
-// 		addBodyPart,
-// 		addBodyPart,
-// 		addBodyPart
-// 	]
 
-// 	let state = gameSetup.reduce( (state, action) => action(state), {})
-// 	state = level1.reduce( (state, action, i) => action(state, i+1, head), state)
-// 	state = level2.reduce( (state, action, i) => action(state, i+1, body), state)
-// 	state = level3.reduce( (state, action, i) => action(state, i+1, legs), state)
 
-// 	for(let i = 1; i < 4; i++) {
-// 		it(`each player has their original drawing back`, () => {
-// 			assert.equal(state.players[i].body, i)
-// 		})
 
-// 		it('each body has a final drawing dataURL string', () => {
-// 			expect(state.bodies[i].final).to.not.be.empty
-// 		})
+describe('After 9 rounds', () => {
+	const gameSetup = [
+		addPlayer,
+		addPlayer,
+		addPlayer
+	]
 
-// 		it('each final drawing is a valid dataURL string', () => {
-// 			expect(state.bodies[i].final).to.contain('data:image/png;base64,')
-// 		})
-// 	}
-// })
+	const setDs = [
+		setDimensions,
+		setDimensions,
+		setDimensions
+	]
+
+	const level1 = [
+		addBodyPart,
+		addBodyPart,
+		addBodyPart
+	]
+
+	const level2 = [
+		addBodyPart,
+		addBodyPart,
+		addBodyPart
+	]
+
+	const level3 = [
+		addBodyPart,
+		addBodyPart,
+		addBodyPart
+	]
+
+	const state = gameSetup.reduce( (state, action, i) => action(state, i+1), {})
+	const state2 = setDs.reduce( (state, action, i) => action(state, i+1, {height: i+1, width: i+2 }),state)
+	const state3 = level1.reduce( (state, action, i) => action(state, i+1, head, drawing1), state2)
+	const state4 = level2.reduce( (state, action, i) => action(state, i+1, body, drawing2), state3)
+	const final = level3.reduce( (state, action, i) => action(state, i+1, legs, drawing3), state4)
+
+	for(let i = 1; i < 4; i++) {
+		it(`each player has their original drawing back`, () => {
+			assert.equal(final.players[i].body, i)
+		})
+
+		it('each body has a final drawing dataURL string', () => {
+			expect(final.bodies[i].final).to.not.be.empty
+		})
+
+		it('each final drawing is a valid dataURL string', () => {
+			expect(final.bodies[i].final).to.contain('data:image/png;base64,')
+		})
+	}
+})

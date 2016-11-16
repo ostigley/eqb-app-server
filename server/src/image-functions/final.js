@@ -20,7 +20,7 @@ export default (state, width = 700, height = 1200) => {
 			ctx.drawImage(imageObj, dx, dy)
 		})
 		body.final = canvas.toDataURL()
+		nextState.bodies[i] = body
 	}
-
 	return nextState
 }
