@@ -4,24 +4,6 @@ import {INITIAL_STATE}from './new-game.js'
 import clone					from 'clone'
 import deepFreeze 		from 'deep-freeze'
 
-const progress = progress => {
-	switch(progress) {
-		case(0):
-			return 1
-		case(1):
-			return 2
-		default:
-			return 0
-	}
-}
-
-
-const level = (current, progress) => {
-		//progress never gets to 3.  Once at 2, the level increments, and progress is reset.
-		return  progress === 2
-			? {current: current+1, previous: current, hasChanged: true}
-			: {current: current, previous: current, hasChanged: false}
-}
 
 const scramble = (state) => {
 	let players = Object.assign({}, state.players)
@@ -64,9 +46,9 @@ const countDimensions = players => {
 
 
 export const addPlayer = (state, playerId, gameId = null) => {
-	debugger
 	if (Object.keys(state).length == 0) return newGame(playerId, gameId) // is state empty
 	if (state.players.num === 3) return Object.freeze(state)
+
 	let nextState = clone(state)
 	nextState.players.num++
 	const nextPlayer = nextState.players.num
@@ -78,9 +60,9 @@ export const addPlayer = (state, playerId, gameId = null) => {
 
 export const removePlayer = (state, playerId) => {
 	let nextState = clone(state)
-	const nextPlayer = nextState.players.num+1
 
 	nextState.bodies= INITIAL_STATE.bodies
+
 	delete nextState.players[playerId];
 	nextState.players.num--
 
@@ -88,41 +70,64 @@ export const removePlayer = (state, playerId) => {
 
 	return deepFreeze(nextState)
 
+/*
+resetLevel
+resetProgress
+
+
+
+*/
 }
 
 export const addBodyPart = (state, bodyNum, part, drawing) => {
 	let nextState = clone(state)
-	const cropped = crop(drawing)
-	//add drawing data
-	nextState.bodies[bodyNum][part] = drawing
-	nextState.bodies[bodyNum].clue = cropped
+	nextState = addNewDrawing(nextState, bodyNum, part, drawing)
 
-	//update game level and progress
-	nextState.progress = progress(state.progress)
-	nextState.level = level(state.level.current, state.progress)
-
-	//scramble player body if necessary
-	if(nextState.level.current !== state.level.current) {
-		nextState.players = scramble(nextState)
-	}
-
-	//generate final images if at end of game
-	if (nextState.level.current === 4) {
-		nextState = generateFinal(nextState)
-	}
-/*
-	let newState= nextState.clone(state)
 	const actions = [
-	 	addNewDrawing,
-	 	incrementProgress,
 	 	incrementLevel,
+	 	incrementProgress,
 	 	generateFinal
 	]
-	return actions.reduce( (state, action) => { action(state) }, newState)
-*/
+
+	return deepFreeze(actions.reduce( (state, action) => action(state), nextState))
+}
 
 
-	return deepFreeze(nextState)
+
+
+
+
+
+// //////////////////////////// HELPERS
+export const incrementLevel = state => {
+	state = clone(state)
+	const {current, previous} = state.level
+	const {progress} = state
+	state.level = state.progress === 3
+		? {current: current+1, previous: current, hasChanged: true }
+		: {current: current, previous: current, hasChanged: false }
+	return state
+}
+
+export const addNewDrawing = (state, bodyNum, part, drawing) => {
+	state = clone(state)
+	const cropped = crop(drawing)
+	state.bodies[bodyNum][part] = drawing
+	state.bodies[bodyNum].clue = cropped
+
+	return state
+}
+
+export const incrementProgress = state => {
+	state = clone(state)
+
+	if (state.progress < 3) {
+		state.progress++
+	} else {
+		state.progress = 0
+	}
+
+	return state
 }
 
 export const setDimensions = (state, playerId, dimensions) => {
@@ -136,14 +141,19 @@ export const lockDimensions = (players) => {
 }
 
 
+export const resetLevel = state => {
+	nextState = clone(state)
+	nextState.level = INITIAL_STATE.level
 
+	return nextState
+}
 
+export const resetProgress = state => {
+	nextState = clone(state)
+	nestState.progress = 0
 
-
-
-
-
-
+	return nextState
+}
 
 
 
