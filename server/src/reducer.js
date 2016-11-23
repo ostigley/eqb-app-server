@@ -16,7 +16,7 @@ export default function reducer(state = {}, action) {
   	case('ADD_DRAWING'):
   		return addBodyPart(state, action.body, action.part, action.drawing)
     case('SET_DIMENSIONS'): 
-      return setDimensions(state, action.playerId, action.dimensions)
+      return startGame(setDimensions(state, action.playerId, action.dimensions))
     case('RESET'): //testng only
       return {}
     default:

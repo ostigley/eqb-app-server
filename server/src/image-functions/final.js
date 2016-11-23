@@ -1,6 +1,9 @@
 import Canvas, {Image} from 'canvas'
 
 export default (state, width = 700, height = 1200) => {
+	if (state.level.current < 4) {
+		return state
+	}
 	let nextState = Object.assign({}, state)
 	const parts = ['head', 'body', 'legs']
 
@@ -17,7 +20,7 @@ export default (state, width = 700, height = 1200) => {
 			ctx.drawImage(imageObj, dx, dy)
 		})
 		body.final = canvas.toDataURL()
+		nextState.bodies[i] = body
 	}
-
 	return nextState
 }
