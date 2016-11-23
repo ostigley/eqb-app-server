@@ -35,7 +35,7 @@ const scramble = (state) => {
 	return players
 }
 
-export const startGame = (playerId, gameId) => {
+export const newGame = (playerId, gameId) => {
 	const nextState = clone(INITIAL_STATE)
 	nextState.players[playerId] = {body: 1}
 	nextState.gameId = gameId
@@ -44,7 +44,7 @@ export const startGame = (playerId, gameId) => {
 
 
 export const addPlayer = (state, playerId, gameId = null) => {
-	if (Object.keys(state).length === 0) return startGame(playerId, gameId) // is state empty
+	if (Object.keys(state).length === 0) return newGame(playerId, gameId) // is state empty
 	let nextState = clone(state)
 	if (nextState.players.num === 3) return Object.freeze(nextState)
 	const nextPlayer = nextState.players.num+1
@@ -92,6 +92,15 @@ export const addBodyPart = (state, b, part, drawing) => {
 	return deepFreeze(nextState)
 }
 
+export const setDimensions = (state, playerId, dimensions) => {
+	let nextState = clone(state)
+	nextState.players[playerId].dimensions = dimensions
+	return deepFreeze(nextState)
+}
+
+export const lockDimensions = (state) => {
+	return state
+}
 
 
 
