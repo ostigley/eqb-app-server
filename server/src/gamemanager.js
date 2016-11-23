@@ -12,7 +12,7 @@ const subscribePlayer = (io, socket, game) => {
 		const {current, previous} = state.level
 		const valid = state.players.hasOwnProperty(socket.id)
 		if((current === null || current !== previous) && valid) {
-				return socket.emit('state', state.send.call(state, socket.id))
+				return socket.emit('state', send(socket.id, state))
 
 		}
 	}
@@ -20,7 +20,6 @@ const subscribePlayer = (io, socket, game) => {
 }
 
 const newPlayer = (gameFloor, io) => {
-	// check if need to change nextGameId if game is full
 
 	return {
 		add: socket => {
@@ -90,6 +89,22 @@ const updateGame = (gameFloor) => {
 		}
 	}
 }
+
+
+const parts = {
+	1: 'head',
+	2: 'body',
+	3: 'legs'
+}
+
+const send = (id, state) => {
+		return {
+			level: state.level.current,
+			body: state.bodies[state.players[id].body],
+			num: state.players[id].body,
+			part: parts[state.level.current]
+		}
+	}
 
 export const GAMEMANAGER = (io) => {
 	let gameFloor = {
