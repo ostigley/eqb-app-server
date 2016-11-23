@@ -8,6 +8,7 @@ export const startServer  = () => {
 	const gameManager = GAMEMANAGER(io)
 
 	io.on('connection', socket => {
+		console.log(socket.id, 'connected')
 		gameManager.add(socket)
 
 		socket.on('action', action => {

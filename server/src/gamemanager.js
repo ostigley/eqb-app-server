@@ -86,7 +86,6 @@ const updateGame = (gameFloor) => {
 				'Updated game',
 				gameFloor.players[socketId]
 				)
-
 		}
 	}
 }
