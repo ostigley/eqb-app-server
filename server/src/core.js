@@ -114,15 +114,17 @@ export const incrementProgress = state => {
 export const setDimensions = (state, playerId, dimensions) => {
 	let nextState = clone(state)
 	nextState.players[playerId].dimensions = dimensions
+	console.log('Sunday')
 	return deepFreeze(startGame(nextState))
 }
 
 export const startGame = (state) => {
-
 	if(countDimensions(state.players) === 3) {
+		console.log('Monday')
 		state = clone(state)
 		state.dimensions = lockDimensions(state)
 		state.level.current = 1
+		state.level.hasChanged = true
 		return deepFreeze(state)
 	}
 

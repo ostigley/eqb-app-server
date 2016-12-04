@@ -9,9 +9,9 @@ const newGame = () => {
 const subscribePlayer = (io, socket, game) => {
 	game.subscribe( () => {
 		const state = game.getState()
-		const {current, previous} = state.level
+		const {hasChanged} = state.level
 		const valid = state.players.hasOwnProperty(socket.id)
-		if((current === null || current !== previous) && valid) {
+		if((hasChanged) && valid) {
 				return socket.emit('state', send(socket.id, state))
 
 		}

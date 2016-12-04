@@ -3,7 +3,8 @@ import {
 	addPlayer,
   removePlayer,
 	addBodyPart,
-  setDimensions} from './core.js'
+  setDimensions,
+  startGame} from './core.js'
 
 export default function reducer(state = {}, action) {
   switch(action.type) {
@@ -15,8 +16,8 @@ export default function reducer(state = {}, action) {
   		return removePlayer(state, action.playerId)
   	case('ADD_DRAWING'):
   		return addBodyPart(state, action.body, action.part, action.drawing)
-    case('SET_DIMENSIONS'): 
-      return startGame(setDimensions(state, action.playerId, action.dimensions))
+    case('SET_DIMENSIONS'):
+      return setDimensions(state, action.playerId, action.dimensions)
     case('RESET'): //testng only
       return {}
     default:

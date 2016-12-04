@@ -141,10 +141,6 @@ describe('Reducer ADD_DRAWING', () => {
 		assert.equal(nextState.progress, 1)
 	})
 
-	it('doesn\'t increment the level initially', () => {
-		assert.equal(1, nextState.level.current)
-	})
-
 	it('generates clue data, and adds is to state', () => {
 		expect(clue).to.have.length.above(21)
 		assert.notEqual(clue, drawing1)
