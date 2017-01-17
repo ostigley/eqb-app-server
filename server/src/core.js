@@ -5,18 +5,7 @@ import clone					from 'clone'
 import deepFreeze 		from 'deep-freeze'
 
 
-const scramble = (state) => {
-	let players = Object.assign({}, state.players)
-	let ids = Object.keys(players)
-	ids.splice(ids.indexOf('num'), 1)//remove num property
-	for (let i = 0; i < 3; i++) {
-		players[ids[i]] =
-			players[ids[i]].body == 3
-				? {body: 1}
-				: {body: players[ids[i]].body + 1}
-	}
-	return players
-}
+
 
 export const newGame = (playerId, gameId) => {
 	const nextState = clone(INITIAL_STATE)
@@ -70,6 +59,7 @@ export const addBodyPart = (state, bodyNum, part, drawing) => {
 	const actions = [
 	 	incrementProgress,
 	 	incrementLevel,
+	 	scramble,
 	 	generateFinal
 	]
 
@@ -81,6 +71,25 @@ export const addBodyPart = (state, bodyNum, part, drawing) => {
 
 
 // //////////////////////////// HELPERS
+const scramble = (state) => {
+	if (state.level.hasChanged) {
+		state = clone(state)
+		const players = Object.assign({}, state.players)
+		const ids = Object.keys(players)
+		ids.splice(ids.indexOf('num'), 1)//remove num property
+		for (let i = 0; i < 3; i++) {
+			players[ids[i]] =
+				players[ids[i]].body == 3
+					? {body: 1}
+					: {body: players[ids[i]].body + 1}
+		}
+		state.players = players
+		return state
+	}
+
+	return state
+}
+
 export const incrementLevel = state => {
 	state = clone(state)
 	const {current, previous} = state.level
@@ -114,13 +123,11 @@ export const incrementProgress = state => {
 export const setDimensions = (state, playerId, dimensions) => {
 	let nextState = clone(state)
 	nextState.players[playerId].dimensions = dimensions
-	console.log('Sunday')
 	return deepFreeze(startGame(nextState))
 }
 
 export const startGame = (state) => {
 	if(countDimensions(state.players) === 3) {
-		console.log('Monday')
 		state = clone(state)
 		state.dimensions = lockDimensions(state)
 		state.level.current = 1
