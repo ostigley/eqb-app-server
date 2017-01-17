@@ -1,6 +1,6 @@
 import Canvas, {Image} from 'canvas'
 
-export default (state, width = 700, height = 1200) => {
+export default (state, width = 350, height = 900) => {
 	if (state.level.current < 4) {
 		return state
 	}
