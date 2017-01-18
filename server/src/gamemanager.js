@@ -98,6 +98,8 @@ const parts = {
 }
 
 const send = (id, state) => {
+	console.log('******',id)
+	console.log('******',state)
 		return {
 			level: state.level.current,
 			body: state.bodies[state.players[id].body],

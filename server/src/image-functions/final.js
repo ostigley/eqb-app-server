@@ -7,7 +7,7 @@ export default (state, width = 350, height = 900) => {
 	let nextState = Object.assign({}, state)
 	const parts = ['head', 'body', 'legs']
 
-	for(let i = 1; i<4; i++) {
+	for(let i = 1; i<2; i++) {
 		const body = nextState.bodies[i]
 		const canvas = new Canvas(width, height)
 		const ctx = canvas.getContext('2d')

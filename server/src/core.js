@@ -27,12 +27,10 @@ const countDimensions = players => {
 
 export const addPlayer = (state, playerId, gameId = null) => {
 	if (Object.keys(state).length == 0) return newGame(playerId, gameId) // is state empty
-	if (state.players.num === 3) return Object.freeze(state)
+	// if (state.players.num === 3) return Object.freeze(state)
 
 	let nextState = clone(state)
-	nextState.players.num++
-	const nextPlayer = nextState.players.num
-	nextState.players[playerId] = {body: nextPlayer}
+	nextState.players[playerId] = {body: 1}
 
 	return deepFreeze(nextState)
 
@@ -59,7 +57,6 @@ export const addBodyPart = (state, bodyNum, part, drawing) => {
 	const actions = [
 	 	incrementProgress,
 	 	incrementLevel,
-	 	scramble,
 	 	generateFinal
 	]
 
@@ -71,7 +68,7 @@ export const addBodyPart = (state, bodyNum, part, drawing) => {
 
 
 // //////////////////////////// HELPERS
-const scramble = (state) => {
+const scramble = state => {
 	if (state.level.hasChanged) {
 		state = clone(state)
 		const players = Object.assign({}, state.players)
@@ -94,9 +91,7 @@ export const incrementLevel = state => {
 	state = clone(state)
 	const {current, previous} = state.level
 	const {progress} = state
-	state.level = state.progress === 3
-		? {current: current+1, previous: current, hasChanged: true }
-		: {current: current, previous: current, hasChanged: false }
+	state.level =  { current: current+1, previous: current, hasChanged: true }
 	return state
 }
 
@@ -111,11 +106,7 @@ export const addNewDrawing = (state, bodyNum, part, drawing) => {
 
 export const incrementProgress = state => {
 	state = clone(state)
-	if (state.progress < 3) {
-		state.progress++
-	} else {
-		state.progress = 1
-	}
+	state.progress = 3
 
 	return state
 }
@@ -123,17 +114,15 @@ export const incrementProgress = state => {
 export const setDimensions = (state, playerId, dimensions) => {
 	let nextState = clone(state)
 	nextState.players[playerId].dimensions = dimensions
+	nextState.dimensions = dimensions
 	return deepFreeze(startGame(nextState))
 }
 
 export const startGame = (state) => {
-	if(countDimensions(state.players) === 3) {
 		state = clone(state)
-		state.dimensions = lockDimensions(state)
 		state.level.current = 1
 		state.level.hasChanged = true
 		return deepFreeze(state)
-	}
 
 	return state
 }
