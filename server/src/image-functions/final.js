@@ -1,10 +1,11 @@
 import Canvas, {Image} from 'canvas'
 
-export default (state, width = 950, height = 300) => {
-	// height:300px;width:950
+export default (state) => {
+	console.log(state.level.current)
 	if (state.level.current < 4) {
 		return state
 	}
+	const { width, height } = state.dimensions
 	let nextState = Object.assign({}, state)
 	const parts = ['head', 'body', 'legs']
 
@@ -13,10 +14,10 @@ export default (state, width = 950, height = 300) => {
 		const canvas = new Canvas(width, height*3)
 		const ctx = canvas.getContext('2d')
 
-		parts.map( (part, i) => {
+		parts.map( (part, x) => {
 			const imageObj = new Image
 			const dx = 0
-			const dy = i*height
+			const dy = x*height
 			imageObj.src = body[part]
 			ctx.drawImage(imageObj, dx, dy)
 		})

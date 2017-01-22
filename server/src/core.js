@@ -51,6 +51,7 @@ export const removePlayer = (state, playerId) => {
 }
 
 export const addBodyPart = (state, bodyNum, part, drawing) => {
+
 	let nextState = clone(state)
 	nextState = addNewDrawing(nextState, bodyNum, part, drawing)
 
@@ -97,7 +98,7 @@ export const incrementLevel = state => {
 
 export const addNewDrawing = (state, bodyNum, part, drawing) => {
 	state = clone(state)
-	const cropped = crop(drawing)
+	const cropped = crop(drawing, state.dimensions.width, state.dimensions.height)
 	state.bodies[bodyNum][part] = drawing
 	state.bodies[bodyNum].clue = cropped
 
@@ -112,6 +113,8 @@ export const incrementProgress = state => {
 }
 
 export const setDimensions = (state, playerId, dimensions) => {
+	if (!dimensions) return state
+	console.log('adding dimensions', dimensions)
 	let nextState = clone(state)
 	nextState.players[playerId].dimensions = dimensions
 	nextState.dimensions = dimensions

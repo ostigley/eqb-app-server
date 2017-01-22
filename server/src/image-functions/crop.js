@@ -2,7 +2,7 @@ import Canvas from 'canvas'  //canvas manipulation outside of the browser
 
 const Image = Canvas.Image
 
-export default (drawing, width = 950, height = 300, percentage = 0.9) => {
+export default (drawing, width = 983, height = 324, percentage = 0.9) => {
   let clueData
   let canvas = new Canvas(width, height)
   let ctx = canvas.getContext('2d')
