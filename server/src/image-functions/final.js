@@ -1,7 +1,6 @@
 import Canvas, {Image} from 'canvas'
 
 export default (state) => {
-	console.log(state.level.current)
 	if (state.level.current < 4) {
 		return state
 	}

@@ -114,7 +114,6 @@ export const incrementProgress = state => {
 
 export const setDimensions = (state, playerId, dimensions) => {
 	if (!dimensions) return state
-	console.log('adding dimensions', dimensions)
 	let nextState = clone(state)
 	nextState.players[playerId].dimensions = dimensions
 	nextState.dimensions = dimensions
