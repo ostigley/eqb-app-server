@@ -3,7 +3,7 @@ import {GAMEMANAGER} from './gamemanager.js'
 
 
 export const startServer  = () => {
-	const io = new Server().attach(3000)
+	const io = new Server().attach(process.env.PORT || 3000)
 
 	const gameManager = GAMEMANAGER(io)
 
