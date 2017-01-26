@@ -1,21 +1,22 @@
 import Canvas, {Image} from 'canvas'
 
-export default (state, width = 350, height = 900) => {
+export default (state) => {
 	if (state.level.current < 4) {
 		return state
 	}
+	const { width, height } = state.dimensions
 	let nextState = Object.assign({}, state)
 	const parts = ['head', 'body', 'legs']
 
 	for(let i = 1; i<4; i++) {
 		const body = nextState.bodies[i]
-		const canvas = new Canvas(width, height)
+		const canvas = new Canvas(width, height*3)
 		const ctx = canvas.getContext('2d')
 
-		parts.map( (part, i) => {
-			const imageObj = new Image
+		parts.map( (part, x) => {
+			const xmageObj = new Image
 			const dx = 0
-			const dy = i*height/3
+			const dy = x*height
 			imageObj.src = body[part]
 			ctx.drawImage(imageObj, dx, dy)
 		})

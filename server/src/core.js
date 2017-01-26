@@ -4,9 +4,6 @@ import {INITIAL_STATE}from './new-game.js'
 import clone					from 'clone'
 import deepFreeze 		from 'deep-freeze'
 
-
-
-
 export const newGame = (playerId, gameId) => {
 	const nextState = clone(INITIAL_STATE)
 	nextState.players[playerId] = {body: 1}
@@ -26,7 +23,7 @@ const countDimensions = players => {
 
 
 export const addPlayer = (state, playerId, gameId = null) => {
-	if (Object.keys(state).length == 0) return newGame(playerId, gameId) // is state empty
+	if (state === {}) return newGame(playerId, gameId)
 	if (state.players.num === 3) return Object.freeze(state)
 
 	let nextState = clone(state)
@@ -71,7 +68,7 @@ export const addBodyPart = (state, bodyNum, part, drawing) => {
 
 
 // //////////////////////////// HELPERS
-const scramble = (state) => {
+const scramble = state => {
 	if (state.level.hasChanged) {
 		state = clone(state)
 		const players = Object.assign({}, state.players)
@@ -101,7 +98,7 @@ export const incrementLevel = state => {
 }
 
 export const addNewDrawing = (state, bodyNum, part, drawing) => {
-	state = clone(state)
+	state = clone(state, state.dimensions.width, state.dimensions.height)
 	const cropped = crop(drawing)
 	state.bodies[bodyNum][part] = drawing
 	state.bodies[bodyNum].clue = cropped
@@ -121,6 +118,7 @@ export const incrementProgress = state => {
 }
 
 export const setDimensions = (state, playerId, dimensions) => {
+	if (!dimensions) return state
 	let nextState = clone(state)
 	nextState.players[playerId].dimensions = dimensions
 	return deepFreeze(startGame(nextState))
