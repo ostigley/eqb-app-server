@@ -51,7 +51,6 @@ export const removePlayer = (state, playerId) => {
 }
 
 export const addBodyPart = (state, bodyNum, part, drawing) => {
-
 	let nextState = clone(state)
 	nextState = addNewDrawing(nextState, bodyNum, part, drawing)
 
@@ -113,6 +112,7 @@ export const incrementProgress = state => {
 }
 
 export const setDimensions = (state, playerId, dimensions) => {
+	console.log(dimensions)
 	if (!dimensions) return state
 	let nextState = clone(state)
 	nextState.players[playerId].dimensions = dimensions

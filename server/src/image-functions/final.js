@@ -18,7 +18,7 @@ export default (state) => {
 			const dx = 0
 			const dy = x*height
 			imageObj.src = body[part]
-			ctx.drawImage(imageObj, dx, dy)
+			ctx.drawImage(imageObj, dx, dy, width, height)
 		})
 		body.final = canvas.toDataURL()
 		nextState.bodies[i] = body
