@@ -18,12 +18,12 @@ export default (state) => {
 			const dx = 0
 			const dy = x*height
 			imageObj.src = body[part]
-			// testing where image starts and finishes
-			ctx.beginPath();
-			// ctx.moveTo(0, dy); //start of image
-			ctx.moveTo(0, dy+ height); //end of image
-			ctx.lineTo(width, dy+height);
-			ctx.stroke();
+			// // testing where image starts and finishes
+			// ctx.beginPath();
+			// // ctx.moveTo(0, dy); //start of image
+			// ctx.moveTo(0, dy+ height); //end of image
+			// ctx.lineTo(width, dy+height);
+			// ctx.stroke();
 			ctx.drawImage(imageObj, dx, dy, width, height)
 		})
 		body.final = canvas.toDataURL()
