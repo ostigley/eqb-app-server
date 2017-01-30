@@ -4,7 +4,7 @@ const Image = Canvas.Image
 
 export default (drawing, width, height, percentage = 0.9) => {
   let clueData
-  let canvas = new Canvas(width, height*0.1)
+  let canvas = new Canvas(width, height * (1-percentage))
   let ctx = canvas.getContext('2d')
 
   let imageObj = new Image
