@@ -103,7 +103,7 @@ const send = (id, state) => {
 			body: state.bodies[state.players[id].body],
 			num: state.players[id].body,
 			part: parts[state.level.current],
-			dimensions: state.dimensions
+			dimensions: state.players[id].dimensions
 		}
 	}
 
