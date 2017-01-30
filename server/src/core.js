@@ -23,7 +23,7 @@ const countDimensions = players => {
 
 
 export const addPlayer = (state, playerId, gameId = null) => {
-	if (state === {}) return newGame(playerId, gameId)
+	if (!state.players) return newGame(playerId, gameId)
 	if (state.players.num === 3) return Object.freeze(state)
 
 	let nextState = clone(state)

@@ -52,9 +52,9 @@ export default (state) => {
 
 
 const largestDimensions = state => {
-	const {players} = state
-	const device
-	var area = 0
+	const {players} = state;
+	let device;
+	let area = 0;
 	for (let player in players) {
 		if (player !== 'num') {
 			let {height, width} = players[player].dimensions
