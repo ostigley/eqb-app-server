@@ -99,16 +99,17 @@ export const incrementLevel = state => {
 
 export const addNewDrawing = (state, bodyNum, part, drawing) => {
 	//find the player the drawing belongs to
+	let player
 	const players = state.players
 	const ids = Object.keys(players)
 	ids.splice(ids.indexOf('num'), 1)//remove num property
 	for (let i = 0; i < 3; i++) {
 		if (players[ids[i]].body === bodyNum) {
-			const player = ids[i]
-			const { width, height } = state.players[player].dimensions
+			player = ids[i]
 		}
 	}
 
+	const { width, height } = state.players[player].dimensions
 	//generate cropped and upadte state
 
 	state = clone(state)
