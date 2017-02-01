@@ -15,7 +15,7 @@ export default (state) => {
 		let ctx = canvas.getContext('2d')
 
 		parts.map( (part, x) => {
-			let xmageObj = new Image;
+			let imageObj = new Image;
 			let dx = 0
 			let dy = x*height
 			imageObj.src = body[part]
@@ -33,7 +33,7 @@ export default (state) => {
 	let dx = 0
 	for(let i = 1; i<4; i++) {
 		let dy = finalImageHeight*i - finalImageHeight; /* starting height must be zero */
-		let xmageObj = new Image;
+		let imageObj = new Image;
 		imageObj.src = nextState.bodies[i].final
 		finalCtx.drawImage(imageObj, dx, dy, finalImageWidth, finalImageHeight)
 	}
