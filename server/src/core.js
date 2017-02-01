@@ -75,10 +75,9 @@ const scramble = state => {
 		const ids = Object.keys(players)
 		ids.splice(ids.indexOf('num'), 1)//remove num property
 		for (let i = 0; i < 3; i++) {
-			players[ids[i]] =
-				players[ids[i]].body == 3
-					? {body: 1}
-					: {body: players[ids[i]].body + 1}
+			players[ids[i]].body = players[ids[i]].body == 3
+					? 1
+					: players[ids[i]].body + 1
 		}
 		state.players = players
 		return state
@@ -98,6 +97,7 @@ export const incrementLevel = state => {
 }
 
 export const addNewDrawing = (state, bodyNum, part, drawing) => {
+
 	//find the player the drawing belongs to
 	let player
 	const players = state.players
@@ -106,18 +106,18 @@ export const addNewDrawing = (state, bodyNum, part, drawing) => {
 	for (let i = 0; i < 3; i++) {
 		if (players[ids[i]].body === bodyNum) {
 			player = ids[i]
+			const { width, height } = state.players[player].dimensions
+			//generate cropped and upadte state
+
+			state = clone(state)
+			const cropped = crop(drawing, width, height)
+			state.bodies[bodyNum][part] = drawing
+			state.bodies[bodyNum].clue = cropped
+
+			return state
 		}
 	}
 
-	const { width, height } = state.players[player].dimensions
-	//generate cropped and upadte state
-
-	state = clone(state)
-	const cropped = crop(drawing, width, height)
-	state.bodies[bodyNum][part] = drawing
-	state.bodies[bodyNum].clue = cropped
-
-	return state
 }
 
 export const incrementProgress = state => {
