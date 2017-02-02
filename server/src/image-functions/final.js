@@ -1,5 +1,5 @@
 import Canvas, {Image} from 'canvas'
-
+import fs from 'fs'
 export default (state) => {
 	if (state.level.current < 4) {
 		return state
@@ -18,8 +18,10 @@ export default (state) => {
 			let imageObj = new Image;
 			let dx = 0
 			let dy = x*height
+			imageObj.onload = () => {
+				ctx.drawImage(imageObj, dx, dy, width, height)
+			}
 			imageObj.src = body[part]
-			ctx.drawImage(imageObj, dx, dy)
 		})
 		body.final = canvas.toDataURL()
 		nextState.bodies[i] = body
@@ -34,16 +36,18 @@ export default (state) => {
 	for(let i = 1; i<4; i++) {
 		let dy = finalImageHeight*i - finalImageHeight; /* starting height must be zero */
 		let imageObj = new Image;
+		imageObj.onload = () => {
+			finalCtx.drawImage(imageObj, dx, dy, finalImageWidth, finalImageHeight)
+		}
 		imageObj.src = nextState.bodies[i].final
-		finalCtx.drawImage(imageObj, dx, dy, finalImageWidth, finalImageHeight)
 	}
 
 	const finalImageAmalgamated = finalCanvas.toDataURL()
+	fs.writeFileSync('../../final.txt', finalImageAmalgamated)
 
 	for (let i = 1; i < 4; i++) {
 		nextState.bodies[i].final = finalImageAmalgamated
 	}
-
 	//add amalgamated image to each body.final
 
 	return nextState
