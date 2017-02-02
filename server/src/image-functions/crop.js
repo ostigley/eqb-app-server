@@ -17,19 +17,10 @@ export default (drawing, width, height, percentage = 0.9) => {
 
   let imageObj = new Image
   imageObj.onload = () => {
-    ctx.drawImage(
-      imageObj,
-      sx,
-      sy,
-      sWidth,
-      sHeight,
-      dx,
-      dy,
-      dWidth,
-      dHeight)
-
-    clueData = canvas.toDataURL()
-    return clueData
+    ctx.drawImage( imageObj, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
   }
   imageObj.src = drawing
+  clueData = canvas.toDataURL()
+  console.log(clueData)
+  return clueData
 }
