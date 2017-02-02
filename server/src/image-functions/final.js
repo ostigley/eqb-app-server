@@ -1,5 +1,4 @@
 import Canvas, {Image} from 'canvas'
-import fs from 'fs'
 export default (state) => {
 	if (state.level.current < 4) {
 		return state
@@ -43,7 +42,6 @@ export default (state) => {
 	}
 
 	const finalImageAmalgamated = finalCanvas.toDataURL()
-	fs.writeFileSync('../../final.txt', finalImageAmalgamated)
 
 	for (let i = 1; i < 4; i++) {
 		nextState.bodies[i].final = finalImageAmalgamated
