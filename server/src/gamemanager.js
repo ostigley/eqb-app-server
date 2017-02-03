@@ -45,6 +45,8 @@ const newPlayer = (gameFloor, io) => {
 
 			gameFloor.freeGames = updateFreeGames(game, gameFloor.freeGames)
 			console.log(socket.id, 'joined game:', gameId)
+			console.log('Active Games:', Object.keys(gameFloor.activeGames))
+			console.log('Free Games:', Object.keys(gameFloor.freeGames))
 		}
 	}
 }
@@ -71,6 +73,8 @@ const removePlayer = (gameFloor) => {
 			if (!freeGames.includes(gameId)) {
 				freeGames.push(gameId)
 			}
+			console.log('Active Games:', Object.keys(gameFloor.activeGames))
+			console.log('Free Games:', Object.keys(gameFloor.freeGames))
 		}
 	}
 }
@@ -98,9 +102,11 @@ const parts = {
 }
 
 const send = (id, state) => {
+	console.log(state.level)
+	const { final, clue } = state.bodies[state.players[id].body]
 		return {
 			level: state.level.current,
-			body: state.bodies[state.players[id].body],
+			body: Object.assign({}, final, clue),
 			num: state.players[id].body,
 			part: parts[state.level.current]
 		}

@@ -21,6 +21,5 @@ export default (drawing, width, height, percentage = 0.9) => {
   }
   imageObj.src = drawing
   clueData = canvas.toDataURL()
-  console.log(clueData)
   return clueData
 }
