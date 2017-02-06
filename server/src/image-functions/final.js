@@ -3,7 +3,10 @@ export default (state) => {
 	if (state.level.current < 4) {
 		return state
 	}
-	const { width, height } = largestDimensions(state);
+
+	const height = 250;
+	const width = 500;
+
 	let nextState = Object.assign({}, state)
 	const parts = ['head', 'body', 'legs']
 
@@ -51,22 +54,3 @@ export default (state) => {
 	return nextState
 }
 
-
-
-const largestDimensions = state => {
-	const {players} = state;
-	let device;
-	let area = 0;
-	for (let player in players) {
-		if (player !== 'num') {
-			let {height, width} = players[player].dimensions
-			var nextArea = height * width
-			if( nextArea > area) {
-				area = nextArea
-				device = player
-			}
-		}
-	}
-
-	return players[device].dimensions
-}

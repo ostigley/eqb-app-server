@@ -12,8 +12,7 @@ export const startServer  = () => {
 		gameManager.add(socket)
 
 		socket.on('action', action => {
-			console.log()
-			console.log('******************************  New Socket Action')
+			console.log('\n','******************************  New Socket Action')
 			gameManager.play(socket.id, action)
 		})
 
