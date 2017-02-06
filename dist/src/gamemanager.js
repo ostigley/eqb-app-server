@@ -51,6 +51,8 @@ var newPlayer = function newPlayer(gameFloor, io) {
 
 			gameFloor.freeGames = updateFreeGames(game, gameFloor.freeGames);
 			console.log(socket.id, 'joined game:', gameId);
+			console.log('Active Games:', Object.keys(gameFloor.activeGames));
+			console.log('Free Games:', Object.keys(gameFloor.freeGames));
 		}
 	};
 };
@@ -76,6 +78,8 @@ var removePlayer = function removePlayer(gameFloor) {
 			if (!freeGames.includes(gameId)) {
 				freeGames.push(gameId);
 			}
+			console.log('Active Games:', Object.keys(gameFloor.activeGames));
+			console.log('Free Games:', Object.keys(gameFloor.freeGames));
 		}
 	};
 };
@@ -86,6 +90,7 @@ var updateGame = function updateGame(gameFloor) {
 			var gameId = gameFloor.players[socketId];
 			var game = gameFloor.activeGames[gameId];
 			game.dispatch(data);
+			console.log('data', Object.keys(data));
 			console.log(socketId, 'Updated game', gameFloor.players[socketId]);
 		}
 	};
@@ -98,9 +103,14 @@ var parts = {
 };
 
 var send = function send(id, state) {
+	console.log(state.level);
+	var _state$bodies$state$p = state.bodies[state.players[id].body],
+	    final = _state$bodies$state$p.final,
+	    clue = _state$bodies$state$p.clue;
+
 	return {
 		level: state.level.current,
-		body: state.bodies[state.players[id].body],
+		body: Object.assign({}, final, clue),
 		num: state.players[id].body,
 		part: parts[state.level.current]
 	};

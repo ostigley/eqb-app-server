@@ -13,7 +13,6 @@ const subscribePlayer = (io, socket, game) => {
 		const valid = state.players.hasOwnProperty(socket.id)
 		if((hasChanged) && valid) {
 				return socket.emit('state', send(socket.id, state))
-
 		}
 	}
 	)
@@ -87,9 +86,11 @@ const updateGame = (gameFloor) => {
 			game.dispatch(data)
 			console.log(
 				socketId,
-				'Updated game',
-				gameFloor.players[socketId]
-				)
+				'Dispatced game:',
+				gameFloor.players[socketId],
+				'with:',
+				data.type
+			)
 		}
 	}
 }
@@ -102,15 +103,14 @@ const parts = {
 }
 
 const send = (id, state) => {
-	console.log(state.level)
 	const { final, clue } = state.bodies[state.players[id].body]
-		return {
-			level: state.level.current,
-			body: Object.assign({}, final, clue),
-			num: state.players[id].body,
-			part: parts[state.level.current]
-		}
+	return {
+		level: state.level.current,
+		body: Object.assign({}, { final: final }, { clue: clue }),
+		num: state.players[id].body,
+		part: parts[state.level.current]
 	}
+}
 
 export const GAMEMANAGER = (io) => {
 	let gameFloor = {

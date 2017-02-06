@@ -93,6 +93,7 @@ export const incrementLevel = state => {
 	state.level = state.progress === 3
 		? {current: current+1, previous: current, hasChanged: true }
 		: {current: current, previous: current, hasChanged: false }
+	console.log('Level is now:', state.level)
 	return state
 }
 
@@ -127,7 +128,7 @@ export const incrementProgress = state => {
 	} else {
 		state.progress = 1
 	}
-
+	console.log('Progress is now', state.progress)
 	return state
 }
 

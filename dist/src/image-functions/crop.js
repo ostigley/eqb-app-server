@@ -35,6 +35,5 @@ exports.default = function (drawing, width, height) {
   };
   imageObj.src = drawing;
   clueData = canvas.toDataURL();
-  console.log(clueData);
   return clueData;
 };
