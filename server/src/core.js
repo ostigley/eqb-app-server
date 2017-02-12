@@ -23,7 +23,7 @@ const countDimensions = players => {
 
 
 export const addPlayer = (state, playerId, gameId = null) => {
-	if (state === {}) return newGame(playerId, gameId)
+	if (!state.players) return newGame(playerId, gameId)
 	if (state.players.num === 3) return Object.freeze(state)
 
 	let nextState = clone(state)
@@ -67,7 +67,7 @@ export const addBodyPart = (state, bodyNum, part, drawing) => {
 
 
 
-// //////////////////////////// HELPERS
+// //////////////////////////// HELPERS   ///////////////////
 const scramble = state => {
 	if (state.level.hasChanged) {
 		state = clone(state)
@@ -75,10 +75,9 @@ const scramble = state => {
 		const ids = Object.keys(players)
 		ids.splice(ids.indexOf('num'), 1)//remove num property
 		for (let i = 0; i < 3; i++) {
-			players[ids[i]] =
-				players[ids[i]].body == 3
-					? {body: 1}
-					: {body: players[ids[i]].body + 1}
+			players[ids[i]].body = players[ids[i]].body == 3
+					? 1
+					: players[ids[i]].body + 1
 		}
 		state.players = players
 		return state
@@ -94,16 +93,32 @@ export const incrementLevel = state => {
 	state.level = state.progress === 3
 		? {current: current+1, previous: current, hasChanged: true }
 		: {current: current, previous: current, hasChanged: false }
+	console.log('Level is now:', state.level)
 	return state
 }
 
 export const addNewDrawing = (state, bodyNum, part, drawing) => {
-	state = clone(state, state.dimensions.width, state.dimensions.height)
-	const cropped = crop(drawing)
-	state.bodies[bodyNum][part] = drawing
-	state.bodies[bodyNum].clue = cropped
 
-	return state
+	//find the player the drawing belongs to
+	let player
+	const players = state.players
+	const ids = Object.keys(players)
+	ids.splice(ids.indexOf('num'), 1)//remove num property
+	for (let i = 0; i < 3; i++) {
+		if (players[ids[i]].body === bodyNum) {
+			player = ids[i]
+			const { width, height } = state.players[player].dimensions
+			//generate cropped and upadte state
+
+			state = clone(state)
+			const cropped = crop(drawing, width, height)
+			state.bodies[bodyNum][part] = drawing
+			state.bodies[bodyNum].clue = cropped
+
+			return state
+		}
+	}
+
 }
 
 export const incrementProgress = state => {
@@ -113,7 +128,7 @@ export const incrementProgress = state => {
 	} else {
 		state.progress = 1
 	}
-
+	console.log('Progress is now', state.progress)
 	return state
 }
 
@@ -127,7 +142,6 @@ export const setDimensions = (state, playerId, dimensions) => {
 export const startGame = (state) => {
 	if(countDimensions(state.players) === 3) {
 		state = clone(state)
-		state.dimensions = lockDimensions(state)
 		state.level.current = 1
 		state.level.hasChanged = true
 		return deepFreeze(state)
@@ -135,25 +149,6 @@ export const startGame = (state) => {
 
 	return state
 }
-
-export const lockDimensions = (state) => {
-	const {players} = state
-	var device
-	var area = 100000000000
-	for (let player in players) {
-		if (player !== 'num') {
-			let {height, width} = players[player].dimensions
-			var nextArea = height * width
-			if( nextArea < area) {
-				area = nextArea
-				device = player
-			}
-		}
-	}
-
-	return players[device].dimensions
-}
-
 
 export const resetLevel = state => {
 	nextState = clone(state)

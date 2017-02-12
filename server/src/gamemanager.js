@@ -13,7 +13,6 @@ const subscribePlayer = (io, socket, game) => {
 		const valid = state.players.hasOwnProperty(socket.id)
 		if((hasChanged) && valid) {
 				return socket.emit('state', send(socket.id, state))
-
 		}
 	}
 	)
@@ -45,6 +44,8 @@ const newPlayer = (gameFloor, io) => {
 
 			gameFloor.freeGames = updateFreeGames(game, gameFloor.freeGames)
 			console.log(socket.id, 'joined game:', gameId)
+			console.log('Active Games:', Object.keys(gameFloor.activeGames))
+			console.log('Free Games:', Object.keys(gameFloor.freeGames))
 		}
 	}
 }
@@ -71,6 +72,8 @@ const removePlayer = (gameFloor) => {
 			if (!freeGames.includes(gameId)) {
 				freeGames.push(gameId)
 			}
+			console.log('Active Games:', Object.keys(gameFloor.activeGames))
+			console.log('Free Games:', Object.keys(gameFloor.freeGames))
 		}
 	}
 }
@@ -83,9 +86,11 @@ const updateGame = (gameFloor) => {
 			game.dispatch(data)
 			console.log(
 				socketId,
-				'Updated game',
-				gameFloor.players[socketId]
-				)
+				'Dispatced game:',
+				gameFloor.players[socketId],
+				'with:',
+				data.type
+			)
 		}
 	}
 }
@@ -98,14 +103,14 @@ const parts = {
 }
 
 const send = (id, state) => {
-		return {
-			level: state.level.current,
-			body: state.bodies[state.players[id].body],
-			num: state.players[id].body,
-			part: parts[state.level.current],
-			dimensions: state.dimensions
-		}
+	const { final, clue } = state.bodies[state.players[id].body]
+	return {
+		level: state.level.current,
+		body: Object.assign({}, { final: final }, { clue: clue }),
+		num: state.players[id].body,
+		part: parts[state.level.current]
 	}
+}
 
 export const GAMEMANAGER = (io) => {
 	let gameFloor = {
