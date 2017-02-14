@@ -93,7 +93,7 @@ export const incrementLevel = state => {
 	state.level = state.progress === 3
 		? {current: current+1, previous: current, hasChanged: true }
 		: {current: current, previous: current, hasChanged: false }
-	console.log('Level is now:', state.level)
+	//console.log('Level is now:', state.level)
 	return state
 }
 
@@ -128,13 +128,13 @@ export const incrementProgress = state => {
 	} else {
 		state.progress = 1
 	}
-	console.log('Progress is now', state.progress)
+	//console.log('Progress is now', state.progress)
 	return state
 }
 
 export const setDimensions = (state, playerId, dimensions) => {
 	if (!dimensions) return state
-	let nextState = clone(state)
+	const nextState = clone(state)
 	nextState.players[playerId].dimensions = dimensions
 	return deepFreeze(startGame(nextState))
 }

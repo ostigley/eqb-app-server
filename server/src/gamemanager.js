@@ -43,9 +43,9 @@ const newPlayer = (gameFloor, io) => {
 			})
 
 			gameFloor.freeGames = updateFreeGames(game, gameFloor.freeGames)
-			console.log(socket.id, 'joined game:', gameId)
-			console.log('Active Games:', Object.keys(gameFloor.activeGames))
-			console.log('Free Games:', Object.keys(gameFloor.freeGames))
+			//console.log(socket.id, 'joined game:', gameId)
+			//console.log('Active Games:', Object.keys(gameFloor.activeGames))
+			//console.log('Free Games:', Object.keys(gameFloor.freeGames))
 		}
 	}
 }
@@ -72,8 +72,8 @@ const removePlayer = (gameFloor) => {
 			if (!freeGames.includes(gameId)) {
 				freeGames.push(gameId)
 			}
-			console.log('Active Games:', Object.keys(gameFloor.activeGames))
-			console.log('Free Games:', Object.keys(gameFloor.freeGames))
+			//console.log('Active Games:', Object.keys(gameFloor.activeGames))
+			//console.log('Free Games:', Object.keys(gameFloor.freeGames))
 		}
 	}
 }
@@ -84,13 +84,7 @@ const updateGame = (gameFloor) => {
 			const gameId = gameFloor.players[socketId]
 			const game = gameFloor.activeGames[gameId]
 			game.dispatch(data)
-			console.log(
-				socketId,
-				'Dispatced game:',
-				gameFloor.players[socketId],
-				'with:',
-				data.type
-			)
+			//console.log(socketId,'Dispatced game:',gameFloor.players[socketId],'with:',data.type)
 		}
 	}
 }
