@@ -9,6 +9,7 @@
   "scripts": {
     "start": "node ./dist/index.js",
     "start:dev": "nodemon ./server/index.js --exec babel-node",
+    "start:load": "nodemon ./load-test.js --exec babel-node",
     "build": "babel server -d dist",
     "watch": "watchify client/index.js -o client/public/bundle.js -dv -t babelify",
     "test:unit": "mocha test/server/unit/**.js --compilers js:babel-core/register",
