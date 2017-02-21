@@ -8,6 +8,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "start": "node ./dist/index.js",
+    "start:mongo": "nodemon ./server/testing-mongo.js --exec babel-node",
     "start:dev": "nodemon ./server/index.js --exec babel-node",
     "start:load": "nodemon ./load-test.js --exec babel-node",
     "build": "babel server -d dist",
