@@ -5,6 +5,6 @@ import {gameController} from './controller/games-controller'
 initializeDoodlehub()
 
 
-const data = 'Hassan Piker is a little annoying'
+const data = {socket: {id: Math.floor(Math.random()*100)}, info: 'Hassan Piker is a little annoying'}
 
 gameController(data).add

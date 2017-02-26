@@ -9,10 +9,12 @@ export const doodlehub = (db) => {
   return {
     createGame: data => {
       return new Promise ( (resolve, reject) => {
-        console.log('data', data)
-        return d.newGameIfRequired()
+        return d.newGameIfRequired(data)
           .then(d.findAnyGame)
-          .then(console.log)  /*do things to state and save it*/
+          .then(game => {
+            return d.addPlayer(data.socket.id, game)
+          })
+          .then(d.reset)
           .then(resolve)
       })
     }

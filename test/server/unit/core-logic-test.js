@@ -34,7 +34,7 @@ describe('Core logic function testing', () => {
 		var playerId, gameId, state, player
 
 		beforeEach(function () {
-			state = addPlayer({}, player1, game1)
+			state = addPlayer(INITIAL_STATE, player1, game1)
 			player = state.players[player1]
 		})
 
@@ -189,7 +189,7 @@ describe('Core logic function testing', () => {
 
 		const level3 = [ addBodyPart, addBodyPart, addBodyPart ]
 
-		const state = gameSetup.reduce( (state, action, i) => action(state, i+1), {})
+		const state = gameSetup.reduce( (state, action, i) => action(state, i+1), INITIAL_STATE)
 		const state2 = setDs.reduce( (state, action, i) => action(state, i+1, {height: 500, width: 500 }),state)
 		const state3 = level1.reduce( (state, action, i) => action(state, i+1, head, drawing1), state2)
 		const state4 = level2.reduce( (state, action, i) => action(state, i+1, body, drawing2), state3)

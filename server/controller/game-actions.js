@@ -8,7 +8,7 @@ export const newPlayer = data => {
       return
     }
 
-    return doodlehub(db).createGame(data)  //.doodlehub().createGame(db)
+    return doodlehub(db).createGame(data)
       .then( (res) => {
         db.close()
         console.log('closed db')

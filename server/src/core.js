@@ -4,10 +4,10 @@ import {INITIAL_STATE}from './new-game.js'
 import clone					from 'clone'
 import deepFreeze 		from 'deep-freeze'
 
-export const newGame = (playerId, gameId) => {
+export const newGame = () => {
 	const nextState = clone(INITIAL_STATE)
-	nextState.players[playerId] = {body: 1}
-	nextState.gameId = gameId
+	// nextState.players[playerId] = {body: 1}
+	// nextState.gameId = gameId
 	return deepFreeze(nextState)
 }
 
@@ -22,8 +22,7 @@ const countDimensions = players => {
 }
 
 
-export const addPlayer = (state, playerId, gameId = null) => {
-	if (!state.players) return newGame(playerId, gameId)
+export const addPlayer = (state, playerId) => {
 	if (state.players.num === 3) return Object.freeze(state)
 
 	let nextState = clone(state)

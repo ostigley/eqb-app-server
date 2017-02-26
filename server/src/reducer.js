@@ -8,6 +8,8 @@ import {
 
 export default function reducer(state = {}, action) {
   switch(action.type) {
+    case('SET_STATE'):
+      return Object.assign({}, action.state);
     case('NEW_GAME'):
       return newGame(action.playerId)
     case('ADD_PLAYER'):
