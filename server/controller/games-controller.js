@@ -4,8 +4,8 @@ import {url} from '../db/db-config.js'
 export const gameController = data => {
 
   return {
-    add: MongoClient.connect(url, actions.newPlayer(data)),
-    // eject: MongoClient.connect(url, removePlayer.bind(this)),
-    // play: MongoClient.connect(url, updateGame.bind(this)),
+    add: () => MongoClient.connect(url, actions.newPlayer(data)),
+    eject: () => MongoClient.connect(url, actions.removePlayer(data)),
+    // play: MongoClient.connect(url, actions.updateGame()),
   }
 }

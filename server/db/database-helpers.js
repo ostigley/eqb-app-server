@@ -20,7 +20,7 @@ export const helpers = db => {
       })
   }
 
-  const newGameIfRequired = data => {
+  const newGameIfRequired = () => {
     return freeGames.count()
     /* count and create game if no games */
       .then(count => {
@@ -32,36 +32,100 @@ export const helpers = db => {
                 freeGames.insertOne({game: result.insertedId}, {w: 1})
                   .then(resolve)
               })
+              .catch(console.log)
           } else {
             resolve()
           }
         })
       })
+      .catch(console.log)
   }
 
   const addPlayer = (socketId, game) => {
+
+    const handlError = e => console.log('Error trying to add player. DB helpers addPlayer', e)
+
     return new Promise ((resolve, reject) => {
       const store = makeStore()
       const actions = [ { type: 'SET_STATE', state: game.game }, { type: 'ADD_PLAYER', playerId: socketId }]
       actions.map(action => store.dispatch(action))
-      const isFull = store.getState().players.num === 3
+      const state = store.getState()
+      const isFull = state.players.num === 3
 
       return activeGames.findAndModify(
         {_id: game._id},
         {new: true},
-        {game: store.getState()}
+        {game: state}
       )
-      .then( (err, obj) => {
-        if (err.ok !== 1) {console.log('There was an error', err)}
-        if (isFull) {
-          updateFreeGames(game, 'remove')
-            .then(resolve)
-        } else {
-          resolve()
-        }
-      })
+        .then( (err, obj) => {
+          if (err.ok !== 1) {console.log('There was an error', err)}
+          if (isFull) {
+            updateFreeGames(game, 'remove')
+              .then(resolve)
+              .catch(handlError)
+              .then(reject)
+          } else {
+            resolve()
+          }
+        })
+        .catch(handlError)
+        .then(reject)
     })
   }
+
+  const removePlayer = socket => {
+
+    const handlError = e => console.log('Error trying to find game to remove player from', e)
+
+    return new Promise ( (resolve, reject) => {
+      activeGames.findOne( { ["game.players."+socket.id] : { $exists : true } } )
+        .then(game => {
+          const store = makeStore()
+          const actions = [{type: 'SET_STATE', state: game.game}, {type: 'REMOVE_PLAYER', playerId: socket.id}]
+          actions.map(action => store.dispatch(action))
+          const state = store.getState()
+          const gameWaiting = state.players.num == 2
+
+          return activeGames.findAndModify(
+            {_id: game._id},
+            {new: true},
+            {game: state}
+          )
+            .then( (err, obj) => {
+              if (err.ok !== 1) {console.log('There was an error', err)}
+              if (gameWaiting) {
+                updateFreeGames(game, 'add')
+                  .then(resolve)
+                  .catch(handlError)
+                  .then(reject)
+              } else {
+                resolve()
+              }
+            })
+            .catch(handlError)
+            .then(reject)
+        })
+        .catch(handlError)
+        .then(reject)
+    })
+  }
+
+  // const saveAndUpdateFreeGames = (game, state) => {
+  //   return activeGames.findAndModify(
+  //     {_id: game._id},
+  //     {new: true},
+  //     {game: state}
+  //   )
+  //   .then( (err, obj) => {
+  //     if (err.ok !== 1) {console.log('There was an error', err)}
+  //     if (isFull) {
+  //       updateFreeGames(game, 'add')
+  //         .then(resolve)
+  //     } else {
+  //       resolve()
+  //     }
+  //   })
+  // }
 
   const updateFreeGames = (game, action) => {
     switch(action) {
@@ -77,7 +141,8 @@ export const helpers = db => {
     reset: reset,
     newGameIfRequired: newGameIfRequired,
     addPlayer: addPlayer,
-    updateFreeGames: updateFreeGames
+    updateFreeGames: updateFreeGames,
+    removePlayer: removePlayer
   }
 
   return helpers

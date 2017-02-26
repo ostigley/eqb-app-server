@@ -5,13 +5,36 @@ export const newPlayer = data => {
   return (err, db) => {
     if (err) {
       console.log('damn errors', err)
+      db.close()
       return
     }
 
-    return doodlehub(db).createGame(data)
+    return doodlehub(db).createOrAddToGame(data)
       .then( (res) => {
         db.close()
         console.log('closed db')
       })
+      .catch(console.log)
+      then(db.close)
+  }
+}
+
+export const removePlayer = data => {
+  return (err, db) => {
+    if (err) {
+      console.log('damn errors', err)
+      db.close()
+      return
+    }
+
+    return doodlehub(db).removePlayer(data)
+      .then( (res) => {
+        db.close()
+        console.log('closed db')
+      })
+      .catch((e) => {
+        console.log('Game Action removePlayer failed', e)
+      })
+      then(db.close)
   }
 }
