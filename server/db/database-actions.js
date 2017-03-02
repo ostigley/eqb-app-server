@@ -12,10 +12,11 @@ export const doodlehub = (db) => {
       const handleError = e => console.log('Error trying to create or add player to game. database-actions.createoradd',e)
 
       return new Promise ( (resolve, reject) => {
-        return d.newGameIfRequired(data)
+        d.newGameIfRequired(data)
           .then(d.findAnyGame)
           .then(game => {
-            return d.addPlayer(data.socket.id, game)
+            console.log('game',game)
+            return d.updateGame(data, game)
           })
           .then(resolve)
           .catch(handleError)
@@ -23,16 +24,34 @@ export const doodlehub = (db) => {
       })
     },
 
-    removePlayer: data => {
+    // removePlayer: data => {
 
-      const handleError = e => console.log('Error trying to remove player. database-actions.removePlayer',e)
+    //   const handleError = e => console.log('Error trying to remove player. database-actions.removePlayer',e)
 
-      return new Promise( (resolve, reject) => {
-        return d.removePlayer(data)
+    //   return new Promise( (resolve, reject) => {
+    //     return d.updateGame(data)
+    //       .then(resolve)
+    //       .catch(handleError)
+    //       .then(reject)
+    //   })
+    // },
+
+    updateGame: data => {
+
+      const handleError = e => console.log('Error trying to updateGame. database-actions.updateGame',e)
+
+      return new Promise ((resolve, reject) => {
+        return d.updateGame(data)
           .then(resolve)
           .catch(handleError)
           .then(reject)
       })
+
     }
   }
 }
+
+// const data = {
+//   action: { type: 'REDUCER', data: '123'},
+//   socket: socket
+// }

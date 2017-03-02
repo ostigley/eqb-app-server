@@ -6,6 +6,6 @@ export const gameController = data => {
   return {
     add: () => MongoClient.connect(url, actions.newPlayer(data)),
     eject: () => MongoClient.connect(url, actions.removePlayer(data)),
-    // play: MongoClient.connect(url, actions.updateGame()),
+    play: () => MongoClient.connect(url, actions.updateGame())
   }
 }
