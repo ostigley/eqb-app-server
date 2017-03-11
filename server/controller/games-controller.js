@@ -1,7 +1,9 @@
+// @flow
 import { MongoClient } from 'mongodb'
 import * as actions from './game-actions'
 import {url} from '../db/db-config.js'
-export const gameController = data => {
+
+export const gameController : any = (data : any) => {
 
   return {
     add: () => MongoClient.connect(url, actions.newPlayer(data)),

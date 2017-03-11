@@ -1,14 +1,14 @@
 import { MongoClient } from 'mongodb'
 
-export const url = 'mongodb://localhost:27017/test-hiddenDoodle'
+export const url = 'mongodb://localhost:27017/hiddenDoodleTest'
 
-export const initializeTestDoodlehub = () => {
+export const initializeTestDoodlehub = (done) => {
   MongoClient.connect(url, function(err, db) {
 
     const activeGames =  db.collection('activeGames')
     activeGames.createIndex( { gameId: 1 }, (err, result) => {
-      if (!err) {
-        console.log('index created')
+      if (err) {
+        console.error(err)
       }
     })
 
@@ -17,13 +17,27 @@ export const initializeTestDoodlehub = () => {
     db.collection('players')
 
     db.close()
+    done()
   });
 }
 
-export const deleteTestDoodlehub = () => {
+export const deleteTestDoodlehub = (done) => {
   MongoClient.connect(url, function(err, db) {
     db.dropDatabase()
-    db.close()
+    .then( () => {
+      return db.close()
+    })
+    .then(done)
+  })
+}
+
+export const resetDb = (done) => {
+  MongoClient.connect(url, (err, db) => {
+    db.collection('freeGames').deleteMany({})
+      .then(() => {
+        db.collection('activeGames').deleteMany({})
+      })
+      .then(done)
   })
 }
 

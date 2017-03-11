@@ -1,22 +1,23 @@
+// @flow
 import deepFreeze from 'deep-freeze'
 
-const INITIAL_STATE = deepFreeze({
+const INITIAL_STATE : state = deepFreeze({
 	bodies: {
-		1: {
+		'1': {
 			head: '',
 			body: '',
 			legs: '',
 			clue: '',
 			final: ''
 		},
-		2: {
+		'2': {
 			head: '',
 			body: '',
 			legs: '',
 			clue: '',
 			final: ''
 		},
-		3: {
+		'3': {
 			head: '',
 			body: '',
 			legs: '',

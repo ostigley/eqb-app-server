@@ -1,3 +1,4 @@
+// @flow
 import crop 					from './image-functions/crop.js'
 import generateFinal 	from './image-functions/final.js'
 import {INITIAL_STATE}from './new-game.js'
@@ -22,19 +23,18 @@ const countDimensions = players => {
 }
 
 
-export const addPlayer = (state, playerId) => {
+export const addPlayer = (state : state, playerId : string) => {
 	if (state.players.num === 3) return Object.freeze(state)
 
-	let nextState = clone(state)
+	let nextState : state = clone(state)
 	nextState.players.num++
 	const nextPlayer = nextState.players.num
 	nextState.players[playerId] = {body: nextPlayer}
-
 	return deepFreeze(nextState)
 
 }
 
-export const removePlayer = (state, playerId) => {
+export const removePlayer = (state : state, playerId : string | number) => {
 	let nextState = clone(state)
 
 	nextState.bodies= INITIAL_STATE.bodies
@@ -48,7 +48,7 @@ export const removePlayer = (state, playerId) => {
 
 }
 
-export const addBodyPart = (state, bodyNum, part, drawing) => {
+export const addBodyPart = (state : state, bodyNum : string | number, part : string, drawing : string) => {
 	let nextState = clone(state)
 	nextState = addNewDrawing(nextState, bodyNum, part, drawing)
 
@@ -59,7 +59,7 @@ export const addBodyPart = (state, bodyNum, part, drawing) => {
 	 	generateFinal
 	]
 
-	return deepFreeze(actions.reduce( (state, action) => action(state), nextState))
+	return deepFreeze(actions.reduce( (state : Object, action : Function) => action(state), nextState))
 }
 
 
@@ -67,7 +67,7 @@ export const addBodyPart = (state, bodyNum, part, drawing) => {
 
 
 // //////////////////////////// HELPERS   ///////////////////
-const scramble = state => {
+const scramble = (state : state) => {
 	if (state.level.hasChanged) {
 		state = clone(state)
 		const players = Object.assign({}, state.players)
@@ -85,7 +85,7 @@ const scramble = state => {
 	return state
 }
 
-export const incrementLevel = state => {
+export const incrementLevel = (state : state) => {
 	state = clone(state)
 	const {current, previous} = state.level
 	const {progress} = state
@@ -96,17 +96,16 @@ export const incrementLevel = state => {
 	return state
 }
 
-export const addNewDrawing = (state, bodyNum, part, drawing) => {
+export const addNewDrawing = (state : state, bodyNum : string | number, part : string, drawing : string) => {
 
 	//find the player the drawing belongs to
-	let player
-	const players = state.players
-	const ids = Object.keys(players)
+	const players : players = state.players
+	const ids : Array<string> = Object.keys(players)
 	ids.splice(ids.indexOf('num'), 1)//remove num property
 	for (let i = 0; i < 3; i++) {
 		if (players[ids[i]].body === bodyNum) {
-			player = ids[i]
-			const { width, height } = state.players[player].dimensions
+			const player : player = state.players[ids[i]]
+			const { width, height } = player.dimensions
 			//generate cropped and upadte state
 
 			state = clone(state)
@@ -120,7 +119,7 @@ export const addNewDrawing = (state, bodyNum, part, drawing) => {
 
 }
 
-export const incrementProgress = state => {
+export const incrementProgress = (state : state) => {
 	state = clone(state)
 	if (state.progress < 3) {
 		state.progress++
@@ -131,14 +130,14 @@ export const incrementProgress = state => {
 	return state
 }
 
-export const setDimensions = (state, playerId, dimensions) => {
+export const setDimensions = (state : state, playerId : string | number, dimensions : dimension) => {
 	if (!dimensions) return state
 	const nextState = clone(state)
 	nextState.players[playerId].dimensions = dimensions
 	return deepFreeze(startGame(nextState))
 }
 
-export const startGame = (state) => {
+export const startGame = (state : state) => {
 	if(countDimensions(state.players) === 3) {
 		state = clone(state)
 		state.level.current = 1
@@ -149,19 +148,19 @@ export const startGame = (state) => {
 	return state
 }
 
-export const resetLevel = state => {
-	nextState = clone(state)
-	nextState.level = INITIAL_STATE.level
+// export const resetLevel = (state : state) => {
+// 	const nextState : state = clone(state)
+// 	nextState.level = INITIAL_STATE.level
 
-	return nextState
-}
+// 	return nextState
+// }
 
-export const resetProgress = state => {
-	nextState = clone(state)
-	nestState.progress = 0
+// export const resetProgress = (state : state) => {
+// 	nextState = clone(state)
+// 	nestState.progress = 0
 
-	return nextState
-}
+// 	return nextState
+// }
 
 
 
