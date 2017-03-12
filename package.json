@@ -14,8 +14,8 @@
     "start:load": "nodemon ./load-test.js --exec babel-node",
     "build": "babel server -d dist",
     "watch": "watchify client/index.js -o client/public/bundle.js -dv -t babelify",
-    "test:unit": "mocha test/server/unit/**.js --compilers js:babel-core/register",
-    "test:db": "clear && mocha test/server/unit/database-helpers-test --compilers js:babel-core/register",
+    "test:unit": "mocha test/server/unit/**.js --compilers js:babel-core/register --watch",
+    "test:db": "clear && mocha test/server/unit/database-helpers-test --compilers js:babel-core/register --watch",
     "test:integration": "mocha test/server/integration/**.js --compilers js:babel-core/register",
     "test:all": "mocha test/server/**/*.* --compilers js:babel-core/register"
   },
@@ -33,6 +33,7 @@
     "flow-bin": "^0.40.0",
     "mocha": "^2.5.3",
     "nodemon": "^1.10.0",
+    "sinon": "^1.17.7",
     "watchify": "^3.7.0"
   },
   "dependencies": {

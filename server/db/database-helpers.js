@@ -42,7 +42,7 @@ export const helpers = db => {
               return freeGames.insertOne({_id:result.insertedId, game: result.insertedId}, {w: 1})
                 .then(resolve)
                 .catch(handlError)
-                .then
+                .then(reject)
             })
             .catch(handlError)
             .then(reject)
@@ -73,7 +73,7 @@ export const helpers = db => {
             const action = freeGamesAction(game.game, newState)
             if (action) {
               return updateFreeGames(game, action)
-                .then((r) => {
+                .then(r => {
                   resolve(result.value)
                 })
                 .catch(handlError)
@@ -139,6 +139,7 @@ export const helpers = db => {
 
     switch(oldGame.players.num) {
       case 0:
+        if (newGame.players.num === 1) return
         return 'add'
       case 3:
         return 'add'

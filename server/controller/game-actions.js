@@ -10,7 +10,7 @@ export const newPlayer : Function = (data) : Function => {
       return
     }
 
-    return doodlehub(db).AddPlayerToGame(data)
+    return doodlehub(db).addPlayerToGame(data)
       .then( (res) => {
         db.close()
         console.log('closed db')

@@ -8,9 +8,9 @@ export const doodlehub : Function = (db : Db) : doodlehub => {
 
   //db actions
   return {
-    AddPlayerToGame: (data) : Promise<void> => {
+    addPlayerToGame: (data) : Promise<void> => {
 
-      const handleError = e => console.error('Error trying to create or add player to game. database-actions.createoradd',e)
+      const handleError = e => console.error('Error trying to add player to game. database-actions.createoradd',e)
 
       return new Promise ( (resolve, reject) => {
         d.newGame(data)
@@ -18,23 +18,16 @@ export const doodlehub : Function = (db : Db) : doodlehub => {
           .then(game => {
             return d.updateGame(data, game)
           })
+          .then(result => {
+            data.socket.join(result._id, () => {
+              resolve(result)
+            })
+          })
           .then(resolve)
           .catch(handleError)
           .then(reject)
       })
     },
-
-    // removePlayer: data => {
-
-    //   const handleError = e => console.error('Error trying to remove player. database-actions.removePlayer',e)
-
-    //   return new Promise( (resolve, reject) => {
-    //     return d.updateGame(data)
-    //       .then(resolve)
-    //       .catch(handleError)
-    //       .then(reject)
-    //   })
-    // },
 
     updateGame: (data) : Promise<void> => {
 
@@ -42,7 +35,10 @@ export const doodlehub : Function = (db : Db) : doodlehub => {
 
       return new Promise ((resolve, reject) => {
         return d.updateGame(data)
-          .then(resolve)
+          .then(result => {
+            data.socket.to(result._id).emit('state', result.game)
+            resolve(result)
+          })
           .catch(handleError)
           .then(reject)
       })
@@ -50,9 +46,3 @@ export const doodlehub : Function = (db : Db) : doodlehub => {
     }
   }
 }
-
-// const data = {
-//   action: { type: 'REDUCER', data: '123'},
-//   socket: socket
-// }
-
