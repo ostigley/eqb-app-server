@@ -1,6 +1,6 @@
 // @flow
 import { MongoClient } from 'mongodb'
-import * as actions from './game-actions'
+import * as actions from './game-controller-callbacks'
 import {url} from '../db/db-config.js'
 
 export const gameController : any = (data : any) => {

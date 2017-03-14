@@ -11,9 +11,10 @@ export const newPlayer : Function = (data) : Function => {
     }
 
     return doodlehub(db).addPlayerToGame(data)
-      .then( (res) => {
-        db.close()
-        console.log('closed db')
+      .then(result => {
+        data.socket.join(result._id, () => {
+          return db.close()
+        })
       })
       .catch(console.error)
       then(db.close)
