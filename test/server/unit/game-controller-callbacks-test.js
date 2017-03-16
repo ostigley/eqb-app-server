@@ -10,25 +10,31 @@ describe('Game Actions Test', () => {
     close: sinon.stub()
   }
   const fakedbResult = {id: '', game: ''}
-  const addPlayerSpy = sinon.spy(() => Promise.resolve(fakedbResult))
-  const updateGameSpy = sinon.spy(() => Promise.resolve(fakedbResult))
+  const fakeSocket = {join: () => {}}
 
-  const fakeDatabaseActions = {
-    addPlayerToGame: addPlayerSpy,
-    updateGame: updateGameSpy
-  }
+  let addPlayerSpy
+  let updateGameSpy
+  let fakeDatabaseActions
   let doodlehub
   let sandbox
-  describe('#New Player', () => {
-    beforeEach(() => {
-      sandbox = sinon.sandbox.create()
-      doodlehub = sandbox.stub(databaseActions, 'doodlehub').returns(fakeDatabaseActions)
-    })
 
-    afterEach(() =>sandbox.restore())
+  beforeEach(() => {
+    addPlayerSpy = sinon.spy(() => Promise.resolve(fakedbResult))
+    updateGameSpy = sinon.spy(() => Promise.resolve(fakedbResult))
+
+    fakeDatabaseActions = {
+      addPlayerToGame: addPlayerSpy,
+      updateGame: updateGameSpy,
+    }
+    sandbox = sinon.sandbox.create()
+    doodlehub = sandbox.stub(databaseActions, 'doodlehub').returns(fakeDatabaseActions)
+  })
+
+  afterEach(() =>sandbox.restore())
+
+  describe('#New Player', () => {
 
     it('calls the addPlayerToGame database action', () => {
-      const fakeSocket = {join: () => {}}
       const callback = newPlayer({socket: fakeSocket})
 
       callback(null, fakeDb)
@@ -45,15 +51,20 @@ describe('Game Actions Test', () => {
 
       callback(null, fakeDb)
       expect(join.called).to.be.true
-      databaseActions.doodlehub.restore()
     })
   })
 
   describe('#Remove Player', () => {
+    it('calls the updateGame database action with redux remove action', () => {
+      const callback = removePlayer()
 
-    it('calls the updateGame database action with redux remove action')
+      callback(null,fakeDb)
+      expect(updateGameSpy.called).to.be.true
+    })
 
-    it('emits an update to the socket room / game')
+    it('emits an update to the socket room / game', () => {
+
+    })
   })
 
   describe('#Update Game', () => {
